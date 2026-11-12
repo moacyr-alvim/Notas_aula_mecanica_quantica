@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A função de onda e a equação de Schrödinger — Mecânica quântica</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>A função de onda e a equação de Schrödinger</h1>
+        <p class="lede">Uma EDP linear, de primeira ordem no tempo, com um $i$ na frente. O quadrado do módulo da solução é uma densidade de probabilidade, a probabilidade escoa como um fluido sem nunca vazar, e as médias obedecem a Newton — quase.</p>
+        <p class="meta">Porta de entrada: dá para começar aqui. A <a href="dirac.html#infinito">página de Dirac</a> explica de onde vem $\psi(x)=\langle x|\psi\rangle$. Leitura de uns 30 minutos, mais a célula de Python.</p>
+        <ul class="livros">
+          <li><b>Griffiths</b>, cap. 1 e §2.1: o livro abre exatamente assim. <b>Shankar</b>, §5.3 (a corrente) e cap. 6 (Ehrenfest).</li>
+          <li><b>Freericks</b> chega à função de onda tarde e de propósito, como projeção de um estado abstrato na base de posição.</li>
+        </ul>
+      </header>
+
+      <h2 id="equacao" data-toc="A equação">A equação</h2>
+      <p>Uma partícula de massa $m$ numa reta, sob um potencial $V(x)$, é descrita por uma função complexa $\psi(x,t)$ que obedece à <b>equação de Schrödinger</b>
+      $$i\hbar\,\frac{\partial\psi}{\partial t}=-\frac{\hbar^2}{2m}\,\frac{\partial^2\psi}{\partial x^2}+V(x)\,\psi.$$
+      O lado direito é o hamiltoniano $H=\frac{P^2}{2m}+V(X)$ escrito na base de posição, com $P=-i\hbar\,\partial_x$: é o quarto postulado de <a href="observaveis.html#postulados">observáveis e medição</a>, visto em coordenadas. Para quem chega pela porta das ondas, ela é simplesmente a equação de partida, assim como $F=ma$ é a da mecânica clássica: não se deduz, se adivinha e se testa.</p>
+      <p>O significado de $\psi$ é a <b>regra de Born</b>: $|\psi(x,t)|^2$ é a densidade de probabilidade de encontrar a partícula em $x$ no instante $t$,
+      $$P\big(a\le x\le b\big)=\int_a^b|\psi(x,t)|^2\,dx,\qquad\int_{-\infty}^{\infty}|\psi(x,t)|^2\,dx=1.$$
+      Não é a partícula que está "espalhada": numa medida de posição ela aparece inteira, num ponto só. O que se espalha é a chance de aparecer aqui ou ali.</p>
+
+      <aside class="box">
+        <p class="tag">Quase o calor</p>
+        <p>Com $V=0$ e $\hbar=m=1$, a equação é $\psi_t=\frac i2\psi_{xx}$: a equação do calor com um coeficiente de difusão imaginário. O $i$ troca o decaimento $e^{-k^2t}$ de cada modo de Fourier por uma rotação $e^{-ik^2t/2}$. Nada se suaviza, nada se perde, e a equação roda para trás no tempo tão bem quanto para a frente — compare com o <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/calor-circulo.html">calor no círculo, no livro de EDP</a>.</p>
+      </aside>
+
+      <h2 id="conservacao" data-toc="A norma se conserva">A probabilidade escoa, mas não vaza</h2>
+      <p>Para a regra de Born fazer sentido, $\int|\psi|^2dx$ tem que continuar valendo $1$. Vale, e a razão é local. Com $\rho=|\psi|^2$ e
+      $$j(x,t)=\frac{\hbar}{m}\,\operatorname{Im}\Big(\bar\psi\,\frac{\partial\psi}{\partial x}\Big),$$
+      a equação de Schrödinger implica a <b>equação de continuidade</b>
+      $$\frac{\partial\rho}{\partial t}+\frac{\partial j}{\partial x}=0.$$
+      É uma <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/leis-conservacao.html">lei de conservação</a>: a probabilidade numa janela $[a,b]$ só muda pelo que atravessa as bordas, $\frac{d}{dt}\int_a^b\rho\,dx=j(a)-j(b)$. Na reta toda, com $\psi\to0$ no infinito, $\int\rho\,dx$ é constante. $j$ é a <b>corrente de probabilidade</b>; numa onda plana $Ae^{ikx}$ ela vale $\frac{\hbar k}{m}|A|^2$ — velocidade vezes densidade, como num fluido.</p>
+
+      <details>
+        <summary>A conta, em quatro linhas</summary>
+        <div class="body">
+          <p>Da equação, $\psi_t=\frac{i\hbar}{2m}\psi_{xx}-\frac i\hbar V\psi$, e conjugando, $\bar\psi_t=-\frac{i\hbar}{2m}\bar\psi_{xx}+\frac i\hbar V\bar\psi$ — aqui se usa que $V$ é <b>real</b>. Então
+          $$\rho_t=\bar\psi\psi_t+\psi\bar\psi_t=\frac{i\hbar}{2m}\big(\bar\psi\psi_{xx}-\psi\bar\psi_{xx}\big)=\frac{i\hbar}{2m}\,\partial_x\big(\bar\psi\psi_x-\psi\bar\psi_x\big),$$
+          porque os termos com $V$ se cancelam e $\bar\psi_x\psi_x$ aparece com os dois sinais. Como $\bar\psi\psi_x-\psi\bar\psi_x=2i\operatorname{Im}(\bar\psi\psi_x)$, sai $\rho_t=-\frac\hbar m\partial_x\operatorname{Im}(\bar\psi\psi_x)=-j_x$.</p>
+          <p>Com um potencial complexo, $V=V_r-i\Gamma/2$, sobra o termo $-\frac\Gamma\hbar\rho$: a probabilidade decai. É assim que se modela, de propósito, uma partícula que pode ser absorvida — exercício 2.</p>
+        </div>
+      </details>
+
+      <h2 id="ehrenfest" data-toc="Ehrenfest">As médias obedecem a Newton — quase</h2>
+      <p>A posição média é $\langle x\rangle=\int x|\psi|^2dx$. Derivando no tempo e usando a equação de continuidade com uma integração por partes,
+      $$\frac{d\langle x\rangle}{dt}=\int x\,\rho_t\,dx=-\int x\,j_x\,dx=\int j\,dx=\frac1m\int\bar\psi\,\Big(-i\hbar\frac{\partial}{\partial x}\Big)\psi\,dx=\frac{\langle p\rangle}{m}.$$
+      (A penúltima igualdade usa que $\int\bar\psi\psi_x$ e $-\int\psi\bar\psi_x$ são iguais, por partes, então a parte imaginária é o todo.) Foi assim que o Griffiths <em>define</em> o operador momento: é o que faz a média da velocidade ser $\langle p\rangle/m$. Uma conta parecida, ou o atalho $\frac{d}{dt}\langle A\rangle=\frac i\hbar\langle[H,A]\rangle$ da <a href="evolucao-spin.html#heisenberg">página da evolução</a> com os comutadores da <a href="incerteza.html#comutador">página da incerteza</a>, dá a segunda metade:
+      $$\frac{d\langle p\rangle}{dt}=-\Big\langle\frac{dV}{dx}\Big\rangle.$$
+      É o <b>teorema de Ehrenfest</b>. Parece Newton, e não é: Newton seria $-V'(\langle x\rangle)$, a força no ponto médio, e o que aparece é a <em>média da força</em>. As duas coisas coincidem quando $V'$ é afim — partícula livre, campo uniforme, oscilador harmônico — e diferem quando o pacote é largo comparado com a escala em que a força muda. O limite clássico é o regime de pacotes estreitos em relação a essa escala, e não "$\hbar\to0$" sem mais nada.</p>
+
+      <h2 id="estacionarios" data-toc="Estados estacionários">Separação de variáveis: estados estacionários</h2>
+      <p>Procurando soluções da forma $\psi(x,t)=\varphi(x)\,T(t)$, como na <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/separacao-variaveis.html">separação de variáveis do livro de EDP</a>, os dois lados se separam com uma constante $E$:
+      $$T(t)=e^{-iEt/\hbar},\qquad-\frac{\hbar^2}{2m}\varphi''+V\varphi=E\,\varphi.$$
+      A segunda é a <b>equação de Schrödinger independente do tempo</b>: o problema de autovalores de $H$. Para cada solução, $|\psi|^2=|\varphi|^2$ não depende do tempo — um estado estacionário — e a energia é bem definida, igual a $E$. A solução geral é uma superposição, $\psi=\sum_nc_n\varphi_n(x)e^{-iE_nt/\hbar}$, e daqui em diante a maior parte do trabalho é achar os $\varphi_n$ e os $E_n$ para potenciais diferentes: o <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/poco-infinito.html">poço infinito</a>, a <a href="particula-livre.html">partícula livre</a>, a <a href="barreira.html">barreira</a>, o <a href="oscilador.html">oscilador</a>.</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo: Crank–Nicolson</h2>
+      <p>Discretize $x$ e troque $H$ por uma matriz (diferenças finitas). Avançar no tempo com Euler explícito, $\psi^{n+1}=(I-i\,\Delta t\,H)\psi^n$, é desastroso para qualquer $\Delta t$: os autovalores de $I-i\Delta tH$ têm módulo $\sqrt{1+E^2\Delta t^2}&gt;1$, e a norma cresce. O esquema de <b>Crank–Nicolson</b> faz a média entre o começo e o fim do passo,
+      $$\Big(I+\tfrac{i\Delta t}{2}H\Big)\psi^{n+1}=\Big(I-\tfrac{i\Delta t}{2}H\Big)\psi^n,$$
+      e a matriz que leva $\psi^n$ em $\psi^{n+1}$ é <b>unitária</b> — a norma se conserva exatamente. Complete a montagem dessa matriz e rode: um pacote gaussiano no oscilador harmônico, a norma ao longo de um período, as médias contra Ehrenfest, e o Euler explícito para comparar.</p>
+      <div class="pycell" data-title="Crank–Nicolson contra Euler, e Ehrenfest"
+           data-starter="../py/funcao_onda_lacunas.py"
+           data-solution="../py/funcao_onda_solucao.py"></div>
+      <p>O Euler parece funcionar por uns dez passos — a norma mal se mexe — e então explode: o que cresce são as componentes de frequência mais alta da grade, que começam no nível do arredondamento e ganham um fator perto de $8$ a cada passo. É a mesma história da <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/cfl.html">condição CFL no livro de EDP</a>, só que sem saída: aqui não há $\Delta t$ pequeno o bastante. E o pacote do oscilador, escolhido com a largura do estado fundamental, oscila sem se deformar, com $\langle x\rangle=2\cos t$ — Ehrenfest com igualdade, porque a força é linear.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. A energia é real e acima do fundo</p>
+        <p>(a) Mostre que, se $\varphi$ resolve a equação independente do tempo com $\int|\varphi|^2=1$, então $E=\int\big(\frac{\hbar^2}{2m}|\varphi'|^2+V|\varphi|^2\big)dx$. (b) Conclua que $E$ é real e que $E&gt;\min V$. Por que não pode valer $E=\min V$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Multiplique a equação por $\bar\varphi$ e integre; no termo $-\frac{\hbar^2}{2m}\int\bar\varphi\varphi''$, integre por partes (as fronteiras somem): vira $\frac{\hbar^2}{2m}\int|\varphi'|^2$.</p>
+          <p>(b) O lado direito é real. E $\int V|\varphi|^2\ge\min V$, com $\frac{\hbar^2}{2m}\int|\varphi'|^2&gt;0$ a menos que $\varphi$ seja constante — e uma constante normalizável na reta é zero. Logo $E&gt;\min V$: não há estado com a partícula parada no fundo do poço. É a energia de ponto zero, de novo (compare com a <a href="incerteza.html#ponto-zero">estimativa pela incerteza</a>).</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Um potencial que absorve</p>
+        <p>Com $V=V_0-i\Gamma/2$, $\Gamma&gt;0$ constante, mostre que $\frac{d}{dt}\int|\psi|^2dx=-\frac\Gamma\hbar\int|\psi|^2dx$. Que tipo de partícula isso modela, e qual é a sua vida média?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Na conta da equação de continuidade, os termos com $V$ não se cancelam mais: $V\psi$ em $\psi_t$ e $\bar V\bar\psi$ em $\bar\psi_t$ dão $\rho_t+j_x=\frac{i}{\hbar}(\bar V-V)\rho=-\frac\Gamma\hbar\rho$. Integrando, $\int\rho$ decai como $e^{-\Gamma t/\hbar}$. É uma partícula instável (ou que pode ser absorvida), com vida média $\tau=\hbar/\Gamma$. Por isso, em física de partículas, a largura de uma ressonância em energia ($\Gamma$) e o tempo de vida ($\tau$) são a mesma informação.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. A corrente de um estado estacionário real</p>
+        <p>(a) Mostre que, se $\varphi$ é real, a corrente $j$ é zero. (b) Mostre que, num estado estacionário qualquer, $j$ não depende de $x$. (c) O que isso diz sobre um estado ligado (que vai a zero no infinito)?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\operatorname{Im}(\varphi\varphi')=0$ se ambos são reais. (b) Num estado estacionário, $\rho_t=0$, então $j_x=0$. (c) Como $j$ é constante e vai a zero no infinito, $j\equiv0$: um estado ligado não carrega corrente. (De fato, para potenciais reais em uma dimensão, os estados ligados podem sempre ser escolhidos reais.)</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Ehrenfest com força não linear</p>
+        <p>Para $V=\lambda x^4$, escreva $\frac{d\langle p\rangle}{dt}$ em termos de $\langle x\rangle$ e da variância $\sigma^2=(\Delta x)^2$, supondo o pacote simétrico em torno da média (momentos centrais ímpares nulos). Quando a "correção quântica" é pequena?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$V'=4\lambda x^3$. Com $x=\langle x\rangle+u$ e $\langle u\rangle=\langle u^3\rangle=0$: $\langle x^3\rangle=\langle x\rangle^3+3\langle x\rangle\sigma^2$. Então
+          $$\frac{d\langle p\rangle}{dt}=-4\lambda\langle x\rangle^3-12\lambda\langle x\rangle\sigma^2.$$
+          O primeiro termo é Newton no ponto médio; o segundo é a correção, pequena quando $\sigma^2\ll\langle x\rangle^2/3$ — pacote estreito em relação à escala em que a força varia. Repare que a correção depende de $\sigma$, que por sua vez evolui: as equações para as médias não se fecham, e é por isso que Ehrenfest não substitui a equação de Schrödinger.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li class="soon">Nada obrigatório: é uma porta de entrada.</li>
+            <li><a href="dirac.html">Notação de Dirac e bases contínuas</a> (para o porquê de $\psi=\langle x|\psi\rangle$)</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="particula-livre.html">Partícula livre e pacotes de onda</a></li>
+            <li><a href="barreira.html">Degraus, barreiras e tunelamento</a></li>
+            <li><a href="oscilador.html">Oscilador harmônico</a></li>
+            <li><a href="observaveis.html">Observáveis e medição</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comutadores e incerteza — Mecânica quântica</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Comutadores e incerteza</h1>
+        <p class="lede">Duas medidas que não comutam não podem ser, ao mesmo tempo, certas. A desigualdade de Heisenberg é Cauchy–Schwarz com um comutador dentro — e, levada a sério, adivinha a energia do estado fundamental do oscilador e o tamanho do átomo de hidrogênio.</p>
+        <p class="meta">Usa <a href="observaveis.html">observáveis e medição</a> (valor esperado e variância) e o $[X,P]=i\hbar$ da <a href="dirac.html#momento">página de Dirac</a>. Leitura de uns 25 minutos.</p>
+        <ul class="livros">
+          <li><b>Griffiths</b>, §3.5. <b>Shankar</b>, cap. 9, que inclui a forma mais forte (Schrödinger) e a relação energia–tempo.</li>
+          <li><b>Freericks</b>, cap. 5 e 8: o livro é construído sobre identidades de comutadores, e não sobre funções de onda.</li>
+        </ul>
+      </header>
+
+      <h2 id="comutador" data-toc="O comutador">O comutador, e o que ele mede</h2>
+      <p>O comutador de dois operadores é $[A,B]=AB-BA$. Ele é antissimétrico, linear em cada entrada, e obedece a uma regra de Leibniz que faz quase todas as contas:
+      $$[A,BC]=[A,B]\,C+B\,[A,C].$$
+      Com ela e com $[X,P]=i\hbar$, saem por indução $[X,P^n]=i\hbar\,nP^{n-1}$ e $[X^n,P]=i\hbar\,nX^{n-1}$, e daí, para funções boas, $[X,f(P)]=i\hbar f'(P)$ e $[f(X),P]=i\hbar f'(X)$. No spin, as matrizes de Pauli dão
+      $$[\sigma_x,\sigma_y]=2i\sigma_z\quad\text{(e permutações cíclicas)},\qquad [S_x,S_y]=i\hbar S_z.$$</p>
+      <p>O sentido físico do comutador está num teorema de álgebra linear: <b>dois operadores hermitianos comutam se e só se têm uma base ortonormal comum de autovetores</b>. Observáveis que comutam são chamados <b>compatíveis</b>: dá para prepará-los ao mesmo tempo com valores definidos, e medir um não estraga o resultado do outro.</p>
+
+      <details>
+        <summary>Por que comutar é o mesmo que ter autovetores em comum</summary>
+        <div class="body">
+          <p>Se há uma base comum, $A$ e $B$ são diagonais nela, e matrizes diagonais comutam. Na outra direção: se $AB=BA$ e $A|a\rangle=a|a\rangle$, então $A(B|a\rangle)=BA|a\rangle=a\,B|a\rangle$, ou seja, $B$ leva cada autoespaço de $A$ nele mesmo. Restrito a esse autoespaço, $B$ continua hermitiano, e tem lá dentro uma base ortonormal de autovetores — que são autovetores de $A$ também, porque estão no autoespaço. Juntando as bases dos autoespaços, sai a base comum.</p>
+          <p>Repare no papel da degenerescência: se $A$ não tem autovalores repetidos, cada autoespaço é uma reta e a base comum é forçada. Se tem, medir $B$ escolhe dentro do autoespaço — é assim que se rotulam estados por vários números quânticos, como $|n,\ell,m\rangle$ no hidrogênio.</p>
+        </div>
+      </details>
+
+      <h2 id="robertson" data-toc="A desigualdade">A desigualdade de Robertson</h2>
+      <p>Fixe o estado $\psi$ e os observáveis $A$ e $B$. Os vetores
+      $$f=(A-\langle A\rangle)\psi,\qquad g=(B-\langle B\rangle)\psi$$
+      têm normas $\|f\|=\Delta A$ e $\|g\|=\Delta B$ (veja a <a href="observaveis.html#esperado">variância</a>). Por Cauchy–Schwarz, e porque o módulo de um complexo é pelo menos o módulo da parte imaginária,
+      $$(\Delta A)^2(\Delta B)^2\ \ge\ |\langle f|g\rangle|^2\ \ge\ \big(\operatorname{Im}\langle f|g\rangle\big)^2.$$
+      Agora, $\langle f|g\rangle=\langle\psi|(A-\langle A\rangle)(B-\langle B\rangle)|\psi\rangle=\langle AB\rangle-\langle A\rangle\langle B\rangle$, e trocando os papéis, $\langle g|f\rangle=\langle BA\rangle-\langle A\rangle\langle B\rangle$. Como $\langle g|f\rangle=\overline{\langle f|g\rangle}$,
+      $$\operatorname{Im}\langle f|g\rangle=\frac{\langle f|g\rangle-\langle g|f\rangle}{2i}=\frac{\langle[A,B]\rangle}{2i}.$$
+      Juntando:</p>
+      $$\boxed{\ \Delta A\;\Delta B\ \ge\ \tfrac12\big|\langle[A,B]\rangle\big|\ }$$
+      <p>Com $A=X$ e $B=P$, o lado direito não depende do estado:
+      $$\Delta x\,\Delta p\ \ge\ \frac\hbar2.$$
+      Com o spin, $\Delta S_x\,\Delta S_y\ge\frac\hbar2|\langle S_z\rangle|$, que depende do estado: no $|{+x}\rangle$, por exemplo, $\langle S_z\rangle=0$ e a cota não diz nada — de fato, ali $\Delta S_x=0$.</p>
+
+      <aside class="box atencao">
+        <p class="tag">O que a desigualdade diz, e o que ela não diz</p>
+        <p>$\Delta x$ e $\Delta p$ são desvios-padrão de medidas feitas em <b>cópias diferentes</b> do mesmo estado: em metade das cópias mede-se $x$, na outra metade $p$. A desigualdade é sobre o estado, não sobre o aparelho. Ela não diz, por si, que medir $x$ "chuta" o momento — essa é outra afirmação (a do microscópio de Heisenberg, uma relação entre erro e perturbação), parecida no espírito e diferente na forma. A versão de Robertson vale para um aparelho perfeito; nenhuma engenharia a contorna, porque não há estado que a viole.</p>
+      </aside>
+
+      <details>
+        <summary>A forma mais forte, de Schrödinger (opcional)</summary>
+        <div class="body">
+          <p>No segundo passo jogou-se fora a parte real de $\langle f|g\rangle$. Guardando-a: $\operatorname{Re}\langle f|g\rangle=\frac12\langle\{A,B\}\rangle-\langle A\rangle\langle B\rangle$, a <b>covariância</b> simetrizada, com $\{A,B\}=AB+BA$. Então
+          $$(\Delta A)^2(\Delta B)^2\ \ge\ \Big(\tfrac12\langle\{A,B\}\rangle-\langle A\rangle\langle B\rangle\Big)^2+\Big(\tfrac1{2i}\langle[A,B]\rangle\Big)^2.$$
+          Para $x$ e $p$, o termo novo mede a correlação entre posição e momento — é diferente de zero, por exemplo, num pacote gaussiano que está se espalhando (as partes rápidas já foram para a frente). Um pacote assim tem $\Delta x\,\Delta p&gt;\hbar/2$, mas satisfaz a desigualdade de Schrödinger com igualdade.</p>
+        </div>
+      </details>
+
+      <h2 id="minimo" data-toc="O pacote mais apertado">O pacote mais apertado é a gaussiana</h2>
+      <p>Quando vale a igualdade $\Delta x\,\Delta p=\hbar/2$? Nos dois passos: Cauchy–Schwarz é igualdade quando $g=\lambda f$, e a parte real de $\langle f|g\rangle=\lambda\|f\|^2$ some quando $\lambda$ é imaginário puro. Com $\lambda=ia$, $a&gt;0$, e escrevendo $x_0=\langle x\rangle$, $p_0=\langle p\rangle$:
+      $$(-i\hbar\,\partial_x-p_0)\,\psi=ia\,(x-x_0)\,\psi\quad\Longrightarrow\quad\psi'=\Big(\frac{ip_0}{\hbar}-\frac{a}{\hbar}(x-x_0)\Big)\psi,$$
+      uma EDO linear de primeira ordem, com solução
+      $$\psi(x)=C\,\exp\!\Big(-\frac{a(x-x_0)^2}{2\hbar}+\frac{ip_0x}{\hbar}\Big),\qquad(\Delta x)^2=\frac{\hbar}{2a}.$$
+      Os únicos estados de incerteza mínima são as <b>gaussianas</b>, deslocadas em posição e em momento. (Com $\lambda=-ia$ a "gaussiana" cresceria no infinito.) É a mesma gangorra $\Delta x\,\Delta k\ge\frac12$ da <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/transformada-fourier.html">transformada de Fourier no livro de EDP</a>, com $p=\hbar k$: a desigualdade de Heisenberg para posição e momento é um teorema de análise de Fourier.</p>
+
+      <h2 id="ponto-zero" data-toc="Energia de ponto zero">O que a incerteza adivinha: energia de ponto zero</h2>
+      <p>Para o oscilador harmônico, $H=\frac{P^2}{2m}+\frac12m\omega^2X^2$. Num estado com $\langle x\rangle=\langle p\rangle=0$ (dá para centrar), $\langle P^2\rangle=(\Delta p)^2$ e $\langle X^2\rangle=(\Delta x)^2$, e a desigualdade dá
+      $$\langle H\rangle=\frac{(\Delta p)^2}{2m}+\frac{m\omega^2(\Delta x)^2}{2}\ \ge\ \frac{\hbar^2}{8m(\Delta x)^2}+\frac{m\omega^2(\Delta x)^2}{2}\ \ge\ \frac{\hbar\omega}2,$$
+      minimizando em $(\Delta x)^2$ no último passo (média aritmética contra geométrica). Nenhum estado tem energia abaixo de $\frac12\hbar\omega$, e a cota é <b>atingida</b> — pela gaussiana com a largura certa, que é o estado fundamental do <a href="oscilador.html">oscilador</a>. A partícula não pode ficar parada no fundo do poço: parada e no fundo seria $\Delta x=\Delta p=0$.</p>
+      <p>No hidrogênio, o mesmo raciocínio, mais grosseiro, explica por que o átomo não colapsa. Um elétron confinado num raio $r$ tem momento da ordem de $\hbar/r$, e energia da ordem de
+      $$E(r)\approx\frac{\hbar^2}{2mr^2}-\frac{e^2}{4\pi\varepsilon_0r}.$$
+      Encolher diminui a energia potencial mas aumenta a cinética, e o mínimo está em $r=a_0=\frac{4\pi\varepsilon_0\hbar^2}{me^2}\approx0{,}53\ \text{Å}$, com $E=-\frac{me^4}{2(4\pi\varepsilon_0)^2\hbar^2}\approx-13{,}6\ \text{eV}$. As duas contas acertam em cheio, o que é sorte (as constantes numéricas da estimativa podiam ter saído diferentes) — mas a ordem de grandeza não é sorte nenhuma: <b>a estabilidade da matéria é um efeito de incerteza</b>.</p>
+
+      <details>
+        <summary>E a "incerteza energia–tempo"?</summary>
+        <div class="body">
+          <p>Não há operador de tempo, então ela não sai de Robertson. O enunciado correto é o de Mandelstam e Tamm: para qualquer observável $A$, com $\frac{d}{dt}\langle A\rangle=\frac{i}{\hbar}\langle[H,A]\rangle$ (veja a <a href="evolucao-spin.html#heisenberg">evolução no tempo</a>), Robertson aplicada a $H$ e $A$ dá
+          $$\Delta E\,\Delta A\ \ge\ \frac\hbar2\Big|\frac{d\langle A\rangle}{dt}\Big|\qquad\Longrightarrow\qquad\Delta E\;\tau_A\ \ge\ \frac\hbar2,\quad \tau_A=\frac{\Delta A}{|d\langle A\rangle/dt|}.$$
+          $\tau_A$ é o tempo que a média de $A$ leva para mudar de um desvio-padrão. Um estado com energia bem definida ($\Delta E\to0$) não muda nada observável — é estacionário. Um estado que muda depressa precisa de uma faixa larga de energias.</p>
+        </div>
+      </details>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Comutadores úteis</p>
+        <p>(a) Prove a regra de Leibniz $[A,BC]=[A,B]C+B[A,C]$. (b) Mostre que $[X,P^2]=2i\hbar P$ e use isso para calcular $[X,H]$ com $H=\frac{P^2}{2m}+V(X)$. (c) Calcule $[P,H]$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $[A,B]C+B[A,C]=ABC-BAC+BAC-BCA=ABC-BCA=[A,BC]$.</p>
+          <p>(b) $[X,P^2]=[X,P]P+P[X,P]=2i\hbar P$. Como $[X,V(X)]=0$, $[X,H]=\frac{i\hbar}{m}P$.</p>
+          <p>(c) $[P,P^2]=0$ e $[P,V(X)]=-i\hbar V'(X)$ (é $[f(X),P]=i\hbar f'(X)$ com o sinal trocado), logo $[P,H]=-i\hbar V'(X)$. Juntos, (b) e (c) dizem que a velocidade é $P/m$ e a força é $-V'$: é o teorema de Ehrenfest disfarçado, como se vê na <a href="funcao-de-onda.html#ehrenfest">página da função de onda</a>.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Incerteza no spin</p>
+        <p>No estado $|{+}\mathbf n\rangle$, com $\mathbf n=(\sin\theta,0,\cos\theta)$: (a) calcule $\Delta S_x$, $\Delta S_y$ e $\langle S_z\rangle$; (b) confira $\Delta S_x\Delta S_y\ge\frac\hbar2|\langle S_z\rangle|$; (c) para que $\theta$ vale a igualdade?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Como $S_j^2=\frac{\hbar^2}4$, $(\Delta S_j)^2=\frac{\hbar^2}4(1-n_j^2)$. Com $n_x=\sin\theta$, $n_y=0$, $n_z=\cos\theta$: $\Delta S_x=\frac\hbar2|\cos\theta|$, $\Delta S_y=\frac\hbar2$, $\langle S_z\rangle=\frac\hbar2\cos\theta$.</p>
+          <p>(b) $\Delta S_x\Delta S_y=\frac{\hbar^2}4|\cos\theta|$ e $\frac\hbar2|\langle S_z\rangle|=\frac{\hbar^2}4|\cos\theta|$. (c) Vale a igualdade para <b>todo</b> $\theta$: os estados de spin ½ no plano $x$–$z$ são todos de incerteza mínima para o par $(S_x,S_y)$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Dispersão zero sem comutar</p>
+        <p>$S_z$ e $S_x$ não comutam. Ainda assim existe estado com $\Delta S_z=0$. Isso contradiz Robertson? E existe estado com $\Delta S_z=\Delta S_x=0$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Não contradiz: em $|{+z}\rangle$, $\Delta S_z=0$ e o lado direito é $\frac12|\langle[S_z,S_x]\rangle|=\frac\hbar2|\langle S_y\rangle|=0$. A desigualdade só obriga o produto a ser positivo quando $\langle[A,B]\rangle\ne0$ <em>naquele estado</em>.</p>
+          <p>Um estado com as duas dispersões nulas seria autovetor comum de $S_z$ e $S_x$, e os autovetores de $S_z$ são $|{\pm z}\rangle$, que não são autovetores de $S_x$. Não existe. "Não comutar" impede uma base comum, mas não impede um ou outro autovetor isolado em comum — e aqui nem isso há.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. A incerteza no poço infinito</p>
+        <p>Para o estado fundamental do poço infinito de largura $\ell$, $\psi=\sqrt{2/\ell}\,\sin(\pi x/\ell)$, calcule $\Delta x$ e $\Delta p$ e confira que $\Delta x\Delta p&gt;\hbar/2$. Por quanto?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Por simetria, $\langle x\rangle=\ell/2$ e $\langle p\rangle=0$. Integrando, $\langle x^2\rangle=\ell^2\big(\frac13-\frac1{2\pi^2}\big)$, logo $(\Delta x)^2=\ell^2\big(\frac1{12}-\frac1{2\pi^2}\big)$, $\Delta x\approx0{,}181\,\ell$. E $\langle p^2\rangle=\hbar^2\int|\psi'|^2=\hbar^2\pi^2/\ell^2$, logo $\Delta p=\pi\hbar/\ell$.</p>
+          <p>O produto é $\pi\hbar\sqrt{\frac1{12}-\frac1{2\pi^2}}\approx0{,}568\,\hbar$, cerca de $14\%$ acima do mínimo $0{,}5\,\hbar$. Não chega ao mínimo porque o seno não é gaussiana; chega perto porque o seno também é um calombo liso com uma escala só.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. O hidrogênio de bolso</p>
+        <p>Refaça a estimativa do hidrogênio com $\langle p^2\rangle\ge\frac{\hbar^2}{4(\Delta r)^2}$ em vez de $\frac{\hbar^2}{r^2}$. Que raio e que energia saem? O que isso diz sobre o quanto se pode confiar nas constantes numéricas de uma estimativa por incerteza?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $E(r)=\frac{\hbar^2}{8mr^2}-\frac{e^2}{4\pi\varepsilon_0r}$, o mínimo fica em $r=a_0/4$ e $E=-4\times13{,}6$ eV $\approx-54$ eV. A ordem de grandeza continua certa (dezenas de eV, frações de ångström), mas o fator numérico mudou por quatro. Estimativas por incerteza acertam <em>escalas</em>; o número exato pede resolver a equação, como no <a href="oscilador.html">oscilador</a> (onde a cota coincide com a resposta, porque o estado fundamental é gaussiano) e no hidrogênio (onde a coincidência da primeira conta é sorte).</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="observaveis.html">Observáveis e medição</a></li>
+            <li><a href="dirac.html">Notação de Dirac e bases contínuas</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="oscilador.html">Oscilador harmônico: operadores escada</a></li>
+            <li><a href="momento-angular.html">Momento angular: a álgebra</a></li>
+            <li><a href="particula-livre.html">Partícula livre e pacotes de onda</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Partícula livre e pacotes de onda — Mecânica quântica</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Partícula livre e pacotes de onda</h1>
+        <p class="lede">Sem força nenhuma, a equação de Schrödinger ainda tem o que contar. As soluções mais simples não são estados; os estados de verdade se espalham; e uma onda quântica tem duas velocidades, uma delas metade da clássica.</p>
+        <p class="meta">Usa <a href="funcao-de-onda.html">a função de onda</a> e, para a base de momentos, a <a href="dirac.html#momento">página de Dirac</a>. Leitura de uns 30 minutos, com a demo e a célula de Python.</p>
+        <ul class="livros">
+          <li><b>Griffiths</b>, §2.4, com o pacote gaussiano entre os problemas do capítulo. <b>Shankar</b>, §5.1.</li>
+          <li><b>Freericks</b> trata a partícula livre pelo operador de translação, sem ondas planas.</li>
+        </ul>
+      </header>
+
+      <h2 id="ondas-planas" data-toc="Ondas planas">Ondas planas: soluções que não são estados</h2>
+      <p>Com $V=0$, $H=P^2/2m$ e a equação independente do tempo é $-\frac{\hbar^2}{2m}\varphi''=E\varphi$. Para cada $k$ real, $\varphi_k=e^{ikx}$ é solução com $E=\frac{\hbar^2k^2}{2m}$, e a solução da equação completa é
+      $$\psi_k(x,t)=e^{i(kx-\omega t)},\qquad\omega(k)=\frac{\hbar k^2}{2m}.$$
+      É um autoestado do momento, com $p=\hbar k$: uma partícula de momento perfeitamente definido. E não é um estado: $|\psi_k|^2=1$ em toda parte e $\int|\psi_k|^2=\infty$. Pela <a href="incerteza.html#robertson">relação de incerteza</a>, $\Delta p=0$ exige $\Delta x=\infty$, e é isso que aparece.</p>
+      <p>Pior: a crista de $e^{i(kx-\omega t)}$ anda com a <b>velocidade de fase</b>
+      $$v_f=\frac{\omega}{k}=\frac{\hbar k}{2m}=\frac{p}{2m},$$
+      que é a <em>metade</em> da velocidade clássica $p/m$. Não há contradição, porque nada físico anda na velocidade de uma crista de onda plana. O que anda é o pacote.</p>
+
+      <h2 id="pacotes" data-toc="Pacotes">Pacotes: a superposição que é um estado</h2>
+      <p>Os $e^{ikx}$ formam uma base (contínua), então qualquer estado normalizável se escreve como superposição deles — é a transformada de Fourier:
+      $$\psi(x,t)=\frac1{\sqrt{2\pi}}\int\phi(k)\,e^{i(kx-\omega(k)t)}\,dk,\qquad\phi(k)=\frac1{\sqrt{2\pi}}\int\psi(x,0)\,e^{-ikx}\,dx.$$
+      Cada componente gira com sua própria frequência, e $|\phi(k)|^2$ não muda nunca: o momento de uma partícula livre se conserva, em distribuição. Se $\phi$ está concentrada perto de $k_0$, expanda $\omega(k)\approx\omega(k_0)+\omega'(k_0)(k-k_0)$:
+      $$\psi(x,t)\approx e^{i(k_0x-\omega(k_0)t)}\cdot\big(\text{envelope}\big)\big(x-\omega'(k_0)\,t\big).$$
+      O envelope — onde a partícula está — anda com a <b>velocidade de grupo</b>
+      $$v_g=\frac{d\omega}{dk}\Big|_{k_0}=\frac{\hbar k_0}{m}=\frac{p_0}{m},$$
+      exatamente a clássica. As cristas lá dentro andam com $v_f=v_g/2$: escorregam para trás dentro do envelope, nascendo na frente e morrendo atrás.</p>
+
+      <h2 id="gaussiano" data-toc="O pacote gaussiano">O pacote gaussiano, exato</h2>
+      <p>Com $\hbar=m=1$ e o pacote de <a href="incerteza.html#minimo">incerteza mínima</a> em $t=0$, de largura $\sigma$ e número de onda médio $k_0$, a integral de Fourier sai em forma fechada:
+      $$\psi(x,t)=\frac{(2\pi\sigma^2)^{-1/4}}{\sqrt{1+it/2\sigma^2}}\exp\!\Big(-\frac{(x-x_0-k_0t)^2}{4\sigma^2(1+it/2\sigma^2)}+ik_0(x-x_0)-\frac{ik_0^2t}{2}\Big).$$
+      O que interessa:
+      $$|\psi|^2\ \text{é gaussiana com centro}\ x_0+k_0t\ \text{e desvio}\ \ \Delta x(t)=\sigma\sqrt{1+\Big(\frac{t}{2\sigma^2}\Big)^2},\qquad\Delta p=\frac1{2\sigma}.$$
+      O pacote anda com a velocidade clássica e <b>se espalha</b>: por um tempo da ordem de $\tau=2\sigma^2$ (em unidades físicas, $\tau=2m\sigma^2/\hbar$) a largura quase não muda; depois, cresce como $\Delta p\cdot t/m$, que é como se espalharia uma nuvem de partículas clássicas com velocidades espalhadas por $\Delta p/m$. O produto $\Delta x\,\Delta p$ começa em $\hbar/2$ e cresce: a incerteza mínima não dura.</p>
+
+      <aside class="box">
+        <p class="tag">Quanto tempo leva para espalhar</p>
+        <p>Um elétron localizado em $\sigma=1$ Å tem $\tau=2m\sigma^2/\hbar\approx1{,}7\times10^{-16}$ s: espalha praticamente na hora. Um grão de poeira de $1\ \mu$g localizado em $1\ \mu$m tem $\tau\approx2\times10^{13}$ s, uns $600$ mil anos. O espalhamento é universal; o que muda é a escala de tempo, que cresce com a massa e com o quadrado da largura.</p>
+      </aside>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
+      <p>À esquerda, a função de onda: a curva escura é $\mathrm{Re}\,\psi$, a faixa é o envelope $\pm|\psi|$. Duas marcas tracejadas: <b>grupo</b>, em $x_0+k_0t$, e <b>fase</b>, em $x_0+k_0t/2$ — onde estaria a crista de uma onda plana que começou no centro. À direita, a largura $\Delta x(t)$, com a reta $\Delta p\cdot t$ tracejada.</p>
+
+      <div class="demo" id="demo-pac">
+        <div class="controls">
+          <label>σ <input type="range" id="pc-sigma" min="0.4" max="3" step="0.05" value="1" aria-label="Largura inicial"><output id="pc-sigmav">1</output></label>
+          <label>k₀ <input type="range" id="pc-k0" min="0" max="3" step="0.1" value="2" aria-label="Número de onda médio"><output id="pc-k0v">2</output></label>
+        </div>
+        <div class="controls">
+          <label>t <input type="range" id="pc-t" min="0" max="12" step="0.01" value="0" aria-label="Tempo"><output id="pc-tv">0</output></label>
+          <button id="pc-play" type="button">▶ Animar</button>
+          <label class="check"><input type="checkbox" id="pc-im"> mostrar Im ψ</label>
+        </div>
+        <div class="panels two">
+          <canvas id="pc-onda" role="img" aria-label="Parte real da função de onda dentro do envelope, com as marcas de grupo e fase"></canvas>
+          <canvas id="pc-larg" role="img" aria-label="Largura do pacote contra o tempo"></canvas>
+        </div>
+        <div class="readout" id="pc-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>Re ψ</span>
+          <span><i style="border-color:var(--carac)"></i>envelope ±|ψ|; Δx(t)</span>
+          <span><i style="border-top-style:dashed;border-color:var(--aux)"></i>Δp·t</span>
+          <span><i style="border-top-style:dashed;border-color:var(--choque)"></i>velocidade de fase</span>
+        </div>
+      </div>
+
+      <p>Para tentar:</p>
+      <ol>
+        <li>Anime com $k_0=2$ e olhe as ondulações dentro do envelope: elas andam mais devagar que ele. A marca da fase fica para trás da marca do grupo na proporção exata de $1$ para $2$.</li>
+        <li>Faça $\sigma$ pequeno ($0{,}4$): o pacote mal sai do lugar e já está largo — $\tau=2\sigma^2=0{,}32$. Com $\sigma=3$, $\tau=18$, e ele atravessa a tela quase sem se deformar.</li>
+        <li>Com $k_0=0$ o pacote não anda, só se espalha. Repare que o envelope continua centrado mas a parte real ganha ondulações dos dois lados: componentes que fogem para a direita e para a esquerda.</li>
+        <li>Num pacote já espalhado, as ondulações ficam mais apertadas na frente e mais frouxas atrás: os componentes rápidos ($k$ grande, comprimento de onda curto) já foram na frente. A célula de Python mede isso.</li>
+      </ol>
+
+      <h2 id="por-que" data-toc="Por que espalha">Por que espalha, e a onda de d'Alembert não</h2>
+      <p>Tudo depende da <b>relação de dispersão</b> $\omega(k)$. Na equação da onda, $\omega=ck$ é linear: todas as componentes andam com a mesma velocidade, $v_f=v_g=c$, e um pulso viaja sem se deformar — é a fórmula de <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/onda-dalembert.html">d'Alembert do livro de EDP</a>. Em Schrödinger, $\omega\propto k^2$: cada componente tem sua velocidade, $v_g$ varia com $k$, e o pacote, que é uma soma de componentes com $k$ espalhado por $\Delta k$, se separa em velocidades espalhadas por $\hbar\Delta k/m$. Equações com $\omega$ não linear em $k$ se chamam <b>dispersivas</b>, e espalhar pacotes é o que elas fazem.</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo: a evolução pela FFT</h2>
+      <p>Na base de momentos a evolução livre é diagonal: cada componente $e^{ikx}$ só ganha a fase $e^{-ik^2t/2}$. Então o algoritmo é: FFT, multiplicar, FFT inversa. Para a partícula livre isso é <em>exato</em> (com a reta trocada por uma caixa periódica grande) e vale para qualquer $t$, sem passos. Complete o multiplicador e compare com a fórmula fechada.</p>
+      <div class="pycell" data-title="Partícula livre pela FFT"
+           data-starter="../py/particula_livre_lacunas.py"
+           data-solution="../py/particula_livre_solucao.py"></div>
+      <p>A terceira figura mostra o número de onda local — a derivada da fase — ao longo do pacote espalhado. Ele é quase exatamente $(x-x_0)/t$: em cada ponto está a parte da onda com o momento de uma partícula clássica que tivesse saído de $x_0$ e chegado ali no tempo $t$. Um pacote livre, depois de muito tempo, vira um mapa de velocidades. É o mesmo algoritmo, com um passo a mais para o potencial, que a <a href="barreira.html">página da barreira</a> usa para jogar um pacote contra um obstáculo.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O pacote obedece à equação</p>
+        <p>Com $\hbar=m=1$, $s=\sigma^2+it/2$ e $y=x-x_0-k_0t$, mostre que $\psi=s^{-1/2}e^{-y^2/4s}$ (o caso $k_0=0$, $x_0=0$, sem a constante) satisfaz $i\psi_t=-\frac12\psi_{xx}$. Depois deduza $\Delta x(t)$ a partir de $|\psi|^2$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $\psi=s^{-1/2}e^{-x^2/4s}$ e $\dot s=i/2$: $\psi_t=\dot s\big(-\frac1{2s}+\frac{x^2}{4s^2}\big)\psi=\frac i2\big(-\frac1{2s}+\frac{x^2}{4s^2}\big)\psi$. E $\psi_x=-\frac{x}{2s}\psi$, $\psi_{xx}=\big(-\frac1{2s}+\frac{x^2}{4s^2}\big)\psi$. Logo $i\psi_t=-\frac12\big(-\frac1{2s}+\frac{x^2}{4s^2}\big)\psi=-\frac12\psi_{xx}$.</p>
+          <p>$|\psi|^2\propto\exp\big(-\frac{x^2}2\mathrm{Re}\frac1s\big)$, com $\mathrm{Re}\frac1s=\frac{\sigma^2}{\sigma^4+t^2/4}$. É gaussiana de variância $\frac{\sigma^4+t^2/4}{\sigma^2}=\sigma^2\big(1+\frac{t^2}{4\sigma^4}\big)$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. A variância de qualquer pacote livre</p>
+        <p>Usando $\frac{d}{dt}\langle A\rangle=\frac i\hbar\langle[H,A]\rangle$ com $H=P^2/2m$, mostre que $\frac{d^2}{dt^2}\langle X^2\rangle=\frac{2\langle P^2\rangle}{m^2}$, constante. Conclua que $(\Delta x)^2$ é um polinômio de grau $2$ em $t$, para <em>qualquer</em> estado inicial, e identifique o coeficiente de $t^2$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$[H,X^2]=\frac1{2m}[P^2,X^2]=-\frac{i\hbar}m(XP+PX)$, então $\frac{d}{dt}\langle X^2\rangle=\frac1m\langle XP+PX\rangle$. De novo: $[H,XP+PX]=-\frac{2i\hbar}{m}P^2$, e $\frac{d}{dt}\langle XP+PX\rangle=\frac2m\langle P^2\rangle$, que é constante porque $[H,P^2]=0$. Do mesmo modo $\langle X\rangle$ é afim em $t$ com inclinação $\langle P\rangle/m$.</p>
+          <p>Subtraindo $\langle X\rangle^2$: $(\Delta x)^2(t)=(\Delta x)^2(0)+c\,t+\frac{(\Delta p)^2}{m^2}t^2$, com $c=\frac1m\big(\langle XP+PX\rangle-2\langle X\rangle\langle P\rangle\big)$ a covariância posição–momento (veja a desigualdade de Schrödinger, na <a href="incerteza.html#robertson">página da incerteza</a>). Se $c&lt;0$, o pacote primeiro <em>encolhe</em> e depois cresce — um pacote "focalizado".</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Fase e grupo, com relatividade</p>
+        <p>Para uma partícula relativística livre, $E=\sqrt{p^2c^2+m^2c^4}$ e, com $E=\hbar\omega$, $p=\hbar k$, a relação de dispersão é $\omega(k)=\sqrt{c^2k^2+m^2c^4/\hbar^2}$. Mostre que $v_g$ é a velocidade relativística da partícula e que $v_fv_g=c^2$. A velocidade de fase passa de $c$: isso é um problema?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$v_g=\frac{d\omega}{dk}=\frac{c^2k}{\omega}=\frac{pc^2}{E}$, que é a velocidade relativística ($p=\gamma mv$, $E=\gamma mc^2$). E $v_f=\frac\omega k=\frac{E}{p}$, logo $v_fv_g=c^2$ e $v_f&gt;c$. Não é problema: nenhuma informação anda com a velocidade de fase de uma onda plana, que nem começa nem termina. O sinal anda com o envelope.</p>
+          <p>No limite não relativístico, $\omega\approx\frac{mc^2}\hbar+\frac{\hbar k^2}{2m}$: a constante $mc^2/\hbar$ muda $v_f$ (para muito acima de $c$), mas não $v_g$. A velocidade de fase depende de onde se põe o zero de energia; a de grupo, não. Mais um motivo para ela não ser física.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Os números do quadro</p>
+        <p>Confira os dois tempos de espalhamento do quadro "Quanto tempo leva para espalhar". Para que largura $\sigma$ um elétron levaria $1$ s para espalhar?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Elétron: $\tau=\frac{2\cdot9{,}11\times10^{-31}\cdot10^{-20}}{1{,}055\times10^{-34}}\approx1{,}7\times10^{-16}$ s. Poeira: $\tau=\frac{2\cdot10^{-9}\cdot10^{-12}}{1{,}055\times10^{-34}}\approx1{,}9\times10^{13}$ s $\approx6\times10^5$ anos.</p>
+          <p>Para $\tau=1$ s: $\sigma=\sqrt{\hbar\tau/2m}=\sqrt{1{,}055\times10^{-34}/(1{,}82\times10^{-30})}\approx7{,}6\times10^{-3}$ m, quase um centímetro. Um elétron só "fica parado" por um segundo se já estiver espalhado por um centímetro.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="funcao-de-onda.html">A função de onda e a equação de Schrödinger</a></li>
+            <li><a href="dirac.html">Notação de Dirac e bases contínuas</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="barreira.html">Degraus, barreiras e tunelamento</a></li>
+            <li><a href="incerteza.html">Comutadores e incerteza</a></li>
+            <li><a href="oscilador.html">Oscilador harmônico</a> (onde o pacote certo não se espalha)</li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/pacote-core.js"></script>
+  <script src="../assets/pacote-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Emaranhamento e Bell — Mecânica quântica</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Emaranhamento e Bell</h1>
+        <p class="lede">Dois spins podem estar num estado em que nenhum dos dois tem estado próprio. Medidos longe um do outro, eles mostram correlações que nenhuma explicação "local" — valores combinados de antemão, sem comunicação — consegue reproduzir. A conta que prova isso tem quatro linhas, e o experimento já foi feito.</p>
+        <p class="meta">Usa <a href="stern-gerlach.html">Stern–Gerlach</a>, <a href="observaveis.html">observáveis e medição</a> e, para o singleto, o exercício 5 de <a href="momento-angular.html#exercicios">momento angular</a>. Leitura de uns 35 minutos, com a demo e a célula de Python.</p>
+        <ul class="livros">
+          <li><b>Griffiths</b>, cap. 12 ("Afterword": EPR, Bell, a matriz densidade). <b>Shankar</b>, cap. 10 (produto tensorial) e 15 (soma de spins).</li>
+          <li><b>Freericks</b>, parte I (cap. 1–4): spin e luz tratados de forma conceitual, chegando cedo às ideias avançadas.</li>
+        </ul>
+      </header>
+
+      <h2 id="produto" data-toc="Duas partículas">Duas partículas: o produto tensorial</h2>
+      <p>Se o spin de Alice vive em $\mathbb C^2$ e o de Bob também, o par vive em $\mathbb C^2\otimes\mathbb C^2\cong\mathbb C^4$, com base $|{\uparrow\uparrow}\rangle,|{\uparrow\downarrow}\rangle,|{\downarrow\uparrow}\rangle,|{\downarrow\downarrow}\rangle$ (o primeiro símbolo é de Alice). As dimensões <b>multiplicam</b>: $n$ qubits precisam de $2^n$ amplitudes, e é dessa explosão que vem tanto a dificuldade de simular sistemas quânticos quanto o interesse em computadores quânticos.</p>
+      <p>Um observável só de Alice é $A\otimes I$; um só de Bob, $I\otimes B$; e eles comutam, como devem dois aparelhos em laboratórios diferentes. Se Alice está em $|a\rangle$ e Bob em $|b\rangle$, o par está em $|a\rangle\otimes|b\rangle$ — um <b>estado produto</b>. Mas o estado geral é
+      $$|\psi\rangle=\sum_{i,j}c_{ij}\,|i\rangle\otimes|j\rangle,$$
+      e só é produto quando a matriz $C=(c_{ij})$ tem posto $1$ ($c_{ij}=a_ib_j$). Os outros estados são <b>emaranhados</b>: neles, nenhuma das partes tem um vetor de estado próprio.</p>
+
+      <details>
+        <summary>A decomposição de Schmidt é a SVD</summary>
+        <div class="body">
+          <p>A decomposição em valores singulares $C=U\Sigma V^\top$ dá bases ortonormais $|u_k\rangle$ de Alice e $|v_k\rangle$ de Bob com
+          $$|\psi\rangle=\sum_k s_k\,|u_k\rangle\otimes|v_k\rangle,\qquad s_k\ge0,\quad\sum_ks_k^2=1.$$
+          O número de $s_k$ não nulos é o <b>posto de Schmidt</b>: $1$ para estados produto, mais para emaranhados. A <b>entropia de emaranhamento</b> $-\sum_ks_k^2\log_2s_k^2$ mede quanto: zero no produto, um bit no máximo para dois qubits. A célula de Python calcula as duas coisas.</p>
+        </div>
+      </details>
+
+      <h2 id="singleto" data-toc="O singleto">O singleto</h2>
+      <p>O estado protagonista é
+      $$|\psi^-\rangle=\frac{1}{\sqrt2}\big(|{\uparrow\downarrow}\rangle-|{\downarrow\uparrow}\rangle\big),$$
+      o estado de spin total zero de dois spins ½. Sua matriz de coeficientes, $\frac1{\sqrt2}\begin{pmatrix}0&amp;1\\-1&amp;0\end{pmatrix}$, tem posto $2$: é emaranhado, e maximamente. Três fatos sobre ele.</p>
+      <ul>
+        <li><b>Anticorrelação perfeita em qualquer eixo.</b> O singleto tem exatamente a mesma forma em qualquer base: $\frac1{\sqrt2}(|{+}\mathbf n,{-}\mathbf n\rangle-|{-}\mathbf n,{+}\mathbf n\rangle)$ (exercício 2). Se Alice e Bob medem na mesma direção, os resultados são sempre opostos.</li>
+        <li><b>Cada metade é puro acaso.</b> Medindo só o spin de Alice, em qualquer direção, sai $\pm$ meio a meio. Não há direção em que o spin de Alice esteja "para cima": a metade de um singleto não tem vetor de Bloch. Em termos de matriz densidade, o estado de Alice é $\frac12I$ — o mesmo de um spin completamente desconhecido.</li>
+        <li><b>As correlações em direções diferentes.</b> Com Alice medindo $\boldsymbol\sigma\cdot\mathbf a$ e Bob $\boldsymbol\sigma\cdot\mathbf b$, a média do produto dos resultados é
+        $$E(\mathbf a,\mathbf b)=\langle\psi^-|\,(\boldsymbol\sigma\cdot\mathbf a)\otimes(\boldsymbol\sigma\cdot\mathbf b)\,|\psi^-\rangle=-\mathbf a\cdot\mathbf b=-\cos\theta_{ab}.$$</li>
+      </ul>
+
+      <details>
+        <summary>De onde sai o $-\cos\theta$</summary>
+        <div class="body">
+          <p>Pela invariância por rotação, ponha $\mathbf a=\hat z$. Se Alice obtém $+$, o estado colapsa em $|{\uparrow\downarrow}\rangle$ e Bob tem $|{\downarrow}\rangle=|{-}\hat z\rangle$; a chance de Bob dar $+$ na direção $\mathbf b$ é $|\langle{+}\mathbf b|{-}\hat z\rangle|^2=\frac{1-\cos\theta}{2}$ (pela fórmula $\frac{1+\mathbf m\cdot\mathbf n}2$ de <a href="stern-gerlach.html#qubit">Stern–Gerlach</a>). Então resultados iguais têm probabilidade $\frac{1-\cos\theta}2$, opostos $\frac{1+\cos\theta}2$, e $E=\frac{1-\cos\theta}2-\frac{1+\cos\theta}2=-\cos\theta$. Começando por Alice dar $-$ sai o mesmo, por simetria.</p>
+        </div>
+      </details>
+
+      <h2 id="epr" data-toc="EPR">EPR: valores combinados de antemão?</h2>
+      <p>Em 1935, Einstein, Podolsky e Rosen argumentaram assim. Se, medindo o spin de Alice, posso prever com certeza o de Bob em qualquer direção, sem tocar em Bob, então o spin de Bob naquela direção era um "elemento de realidade" antes da medida. Como isso vale em toda direção, a partícula de Bob carrega respostas para todas as perguntas — e a mecânica quântica, que não atribui essas respostas, seria incompleta. A alternativa parecia ser uma influência instantânea à distância, que Einstein recusava.</p>
+      <p>A ideia de EPR tem uma forma precisa. Um <b>modelo local de variáveis ocultas</b> diz que cada par sai da fonte com um parâmetro escondido $\lambda$, sorteado com alguma distribuição, e que os resultados são funções
+      $$A(\mathbf a,\lambda)=\pm1,\qquad B(\mathbf b,\lambda)=\pm1,$$
+      a de Alice sem depender da direção que Bob escolheu, e vice-versa. Correlações perfeitas são fáceis de fabricar assim: basta fazer $B(\mathbf n,\lambda)=-A(\mathbf n,\lambda)$. A demo usa um modelo desses — $\lambda$ é um ângulo ao acaso, e cada partícula responde $+$ se a direção medida está a menos de $90^\circ$ de $\lambda$ — que acerta a anticorrelação perfeita e erra o resto: dá um dente de serra no lugar do cosseno. A questão é se <em>algum</em> modelo local acerta o cosseno.</p>
+
+      <h2 id="chsh" data-toc="A desigualdade CHSH">A desigualdade CHSH</h2>
+      <p>John Bell mostrou em 1964 que não. A versão mais usada é a de Clauser, Horne, Shimony e Holt (1969). Alice escolhe, a cada par, uma de duas direções, $\mathbf a$ ou $\mathbf a'$; Bob, uma de duas, $\mathbf b$ ou $\mathbf b'$. Considere
+      $$S=E(\mathbf a,\mathbf b)-E(\mathbf a,\mathbf b')+E(\mathbf a',\mathbf b)+E(\mathbf a',\mathbf b').$$
+      Num modelo local, para cada $\lambda$, com $A=A(\mathbf a,\lambda)$, $A'=A(\mathbf a',\lambda)$ e assim por diante, todos $\pm1$:
+      $$AB-AB'+A'B+A'B'=A(B-B')+A'(B+B').$$
+      Como $B$ e $B'$ valem $\pm1$, um dos parênteses é $0$ e o outro é $\pm2$. A expressão vale $\pm2$ para todo $\lambda$, e a média sobre $\lambda$ fica entre $-2$ e $2$:</p>
+      $$\boxed{\ |S|\le2\quad\text{em qualquer modelo local de variáveis ocultas.}\ }$$
+      <p>Para o singleto, $E=-\cos\theta$. Com as direções num plano em $\mathbf a=0^\circ$, $\mathbf a'=90^\circ$, $\mathbf b=45^\circ$, $\mathbf b'=135^\circ$:
+      $$S=-\cos45^\circ+\cos135^\circ-\cos45^\circ-\cos45^\circ=-2\sqrt2\approx-2{,}83.$$
+      <b>A mecânica quântica viola a desigualdade</b>, e por uma margem grande. Não é possível que os resultados estejam escritos de antemão em cada partícula e que nenhuma delas dependa da escolha feita do outro lado.</p>
+
+      <aside class="box">
+        <p class="tag">O experimento</p>
+        <p>Clauser fez o primeiro teste em 1972, Aspect e colaboradores trocaram as direções durante o voo dos fótons em 1982, e em 2015 três grupos (em Delft, Viena e Boulder) fizeram testes sem as brechas que restavam, com os detectores eficientes e as escolhas separadas no espaço-tempo. Todos encontraram $|S|&gt;2$, de acordo com a mecânica quântica. Aspect, Clauser e Zeilinger dividiram o Nobel de Física de 2022 por esses experimentos.</p>
+      </aside>
+
+      <details>
+        <summary>Por que não passa de $2\sqrt2$ (a cota de Tsirelson)</summary>
+        <div class="body">
+          <p>Com observáveis $A,A',B,B'$ de quadrado $I$, e os de Alice comutando com os de Bob, seja $\mathcal S=A(B-B')+A'(B+B')$. Uma conta direta dá
+          $$\mathcal S^2=4I-[A,A'][B,B'].$$
+          Cada comutador tem norma no máximo $2$, então $\|\mathcal S^2\|\le8$ e $|\langle\mathcal S\rangle|\le2\sqrt2$. Num modelo clássico os comutadores são zero e volta a cota $2$. A mecânica quântica viola Bell, mas não "o máximo possível": existem correlações não locais que não sinalizam e chegam a $4$, e entender por que a natureza para em $2\sqrt2$ é um problema ainda aberto de fundamentos.</p>
+        </div>
+      </details>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
+      <p>À esquerda, a correlação $E$ contra o ângulo entre os ajustes de Alice e Bob: o cosseno do singleto (violeta) e o dente de serra do modelo local (vermelho, tracejado). As linhas pontilhadas marcam os quatro pares de ajustes. À direita, $|S|$ — teoria e sorteio — para os dois. "Medir" sorteia $2000$ pares para cada um dos quatro pares de ajustes, pela regra de Born no caso do singleto e pela variável oculta no caso local.</p>
+
+      <div class="demo" id="demo-bell">
+        <div class="controls">
+          <label>a <input type="range" id="bl-a" min="0" max="180" step="1" value="0" aria-label="Ajuste a de Alice"><output id="bl-av">0°</output></label>
+          <label>a′ <input type="range" id="bl-a2" min="0" max="180" step="1" value="60" aria-label="Ajuste a linha de Alice"><output id="bl-a2v">60°</output></label>
+        </div>
+        <div class="controls">
+          <label>b <input type="range" id="bl-b" min="0" max="180" step="1" value="30" aria-label="Ajuste b de Bob"><output id="bl-bv">30°</output></label>
+          <label>b′ <input type="range" id="bl-b2" min="0" max="180" step="1" value="120" aria-label="Ajuste b linha de Bob"><output id="bl-b2v">120°</output></label>
+        </div>
+        <div class="controls">
+          <button id="bl-otimo" type="button">Ajustes ótimos</button>
+          <button id="bl-rodar" type="button">Medir</button>
+          <button id="bl-zera" type="button">Limpar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="bl-corr" role="img" aria-label="Correlação contra o ângulo entre os ajustes, quântica e do modelo local"></canvas>
+          <canvas id="bl-S" role="img" aria-label="Valores de S do singleto e do modelo local, com os limites 2 e 2 raiz de 2"></canvas>
+        </div>
+        <div class="readout" id="bl-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac)"></i>singleto (círculos: medido)</span>
+          <span><i style="border-top-style:dashed;border-color:var(--choque)"></i>modelo local (quadrados: medido)</span>
+        </div>
+      </div>
+
+      <p>Para tentar:</p>
+      <ol>
+        <li>Com os ajustes iniciais, $|S|$ do singleto já passa de $2$, e o do modelo local fica em $2$ exatos (nesses ângulos ele encosta na cota). Clique em <b>Medir</b> várias vezes: o sorteio flutua uns poucos centésimos em volta da teoria.</li>
+        <li>Clique em <b>Ajustes ótimos</b>: $|S|=2\sqrt2$ para o singleto. Repare onde ficam as quatro marcas: três pares a $45^\circ$ e um a $135^\circ$ — onde o cosseno mais se afasta do dente de serra.</li>
+        <li>Ponha $\mathbf a=\mathbf b$: o singleto e o modelo local dão os dois $E=-1$. A anticorrelação perfeita, que impressionou EPR, não distingue nada. O que distingue são os ângulos intermediários.</li>
+        <li>Tente fazer o modelo local passar de $2$ mexendo nos ângulos. Não dá — e a prova acima diz que nenhum outro modelo local, por mais esperto, daria.</li>
+      </ol>
+
+      <h2 id="nao-diz" data-toc="O que Bell não diz">O que Bell não diz</h2>
+      <p>A violação não permite mandar mensagens. A estatística dos resultados de Alice é meio a meio <b>seja qual for</b> a direção que Bob escolhe (exercício 3); a correlação só aparece quando os dois juntam as listas, por um canal comum, à velocidade da luz ou menos. O que cai é a conjunção "os resultados estão determinados de antemão" <em>e</em> "nada aqui depende da escolha feita lá". Cada interpretação abre mão de uma parte: Bohm aceita influências não locais, muitos mundos abre mão de resultados únicos, outras recusam a ideia de que valores não medidos existam. Nenhuma recupera a imagem de EPR.</p>
+      <p>E o emaranhamento virou recurso: é o que a criptografia quântica usa para detectar espiões (um intruso que mede destrói a violação de Bell), o que o teletransporte quântico consome, e o que um computador quântico precisa produzir em grande escala.</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>A célula constrói tudo com <code>np.kron</code>: o singleto como vetor de $\mathbb C^4$ e o observável $\sigma_{\mathbf a}\otimes\sigma_{\mathbf b}$ como matriz $4\times4$. Complete o operador e ela confere $E=-\cos(\mathbf a-\mathbf b)$, procura numa grade os ângulos que maximizam $|S|$ (e acha $2\sqrt2$), calcula coeficientes de Schmidt e entropia de emaranhamento de três estados, e o traço parcial que dá o estado de Alice, $\frac12I$.</p>
+      <div class="pycell" data-title="Singleto, CHSH e Schmidt com np.kron"
+           data-starter="../py/emaranhamento_lacunas.py"
+           data-solution="../py/emaranhamento_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Emaranhado ou não?</p>
+        <p>Quais destes estados de dois qubits são produto? (a) $\frac12(|00\rangle+|01\rangle+|10\rangle+|11\rangle)$; (b) $\frac1{\sqrt2}(|00\rangle+|11\rangle)$; (c) $\frac12(|00\rangle+|01\rangle+|10\rangle-|11\rangle)$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Basta o determinante da matriz $C$. (a) $C=\frac12\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}$, determinante $0$: produto, é $|{+x}\rangle\otimes|{+x}\rangle$. (b) $\frac1{\sqrt2}\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix}$, determinante $\frac12\ne0$: emaranhado (é um dos estados de Bell). (c) $\frac12\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}$, determinante $-\frac12$: emaranhado — apesar de todas as amplitudes terem o mesmo módulo, um único sinal trocado basta.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. O singleto é o mesmo em toda base</p>
+        <p>Mostre que, para qualquer unitária $U$ de $2\times2$, $(U\otimes U)|\psi^-\rangle=\det U\;|\psi^-\rangle$. Conclua que, escrito na base $|{\pm}\mathbf n\rangle$, o singleto tem a mesma forma, a menos de fase.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Na forma de matriz de coeficientes, $(U\otimes V)$ age como $C\mapsto UCV^\top$, e o singleto tem $C=\frac1{\sqrt2}J$ com $J=\begin{pmatrix}0&amp;1\\-1&amp;0\end{pmatrix}$. Para matrizes $2\times2$ vale $UJU^\top=\det U\cdot J$ (confira com as entradas: é a expansão do determinante). Logo $(U\otimes U)|\psi^-\rangle=\det U\,|\psi^-\rangle$. Tomando $U$ a matriz que leva $|{\uparrow}\rangle,|{\downarrow}\rangle$ em $|{+}\mathbf n\rangle,|{-}\mathbf n\rangle$, sai $\frac1{\sqrt2}(|{+}\mathbf n,{-}\mathbf n\rangle-|{-}\mathbf n,{+}\mathbf n\rangle)$ vezes uma fase.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Sem mensagens</p>
+        <p>Mostre que, no singleto, a probabilidade de Alice obter $+$ na direção $\mathbf a$ é $\frac12$, quer Bob meça em $\mathbf b$, quer em $\mathbf b'$, quer não meça nada. Mostre o mesmo para um estado de dois qubits qualquer: a estatística de Alice só depende do traço parcial $\rho_A$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Se Bob mede $\mathbf b$, a chance de Alice dar $+$ é $P(+,+)+P(+,-)=\frac{1-\cos\theta}4+\frac{1+\cos\theta}4=\frac12$, sem $\theta$. Em geral, a probabilidade de Alice é $\sum_b\langle\psi|\Pi_a\otimes\Pi_b|\psi\rangle=\langle\psi|\Pi_a\otimes I|\psi\rangle$, porque os projetores de Bob somam $I$ — e isso não depende de qual medida Bob fez. Escrevendo $\langle\psi|\Pi_a\otimes I|\psi\rangle=\operatorname{tr}(\Pi_a\rho_A)$ com $\rho_A=\operatorname{tr}_B|\psi\rangle\langle\psi|$, tudo o que Alice vê está em $\rho_A$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. O dente de serra</p>
+        <p>No modelo local da demo, $\lambda$ é um ângulo uniforme, $A=\operatorname{sinal}\cos(a-\lambda)$ e $B=-\operatorname{sinal}\cos(b-\lambda)$. Mostre que $E(a,b)=-\big(1-\frac{2\theta}\pi\big)$, com $\theta=|a-b|\in[0,\pi]$, e calcule $S$ nos ajustes ótimos do singleto.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\operatorname{sinal}\cos(a-\lambda)$ e $\operatorname{sinal}\cos(b-\lambda)$ discordam quando $\lambda$ cai entre as fronteiras dos dois semicírculos: dois arcos de comprimento $\theta$, de um total de $2\pi$. Então $AB=-1$ (concordam) com probabilidade $1-\frac\theta\pi$ e $AB=+1$ com probabilidade $\frac\theta\pi$, e $E=-(1-\frac\theta\pi)+\frac\theta\pi=-\big(1-\frac{2\theta}\pi\big)$.</p>
+          <p>Nos ajustes ótimos: três pares a $45^\circ$ dão $E=-\frac12$, e o par $(\mathbf a,\mathbf b')$ a $135^\circ$ dá $E=+\frac12$. Então $S=-\frac12-\frac12-\frac12-\frac12=-2$: o modelo encosta na cota, mas não passa.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Os melhores ângulos</p>
+        <p>Com todas as direções num plano e $E=-\cos$, tome $\mathbf a=0$, $\mathbf b=\varphi$, $\mathbf a'=2\varphi$, $\mathbf b'=3\varphi$. Mostre que $|S|=|3\cos\varphi-\cos3\varphi|$ e que o máximo é $2\sqrt2$, em $\varphi=45^\circ$. Para que faixa de $\varphi$ a desigualdade é violada? (A segunda figura da célula mostra a curva.)</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>As diferenças são $\varphi$ (para $a,b$), $3\varphi$ ($a,b'$), $\varphi$ ($a',b$) e $\varphi$ ($a',b'$): $S=-\cos\varphi+\cos3\varphi-\cos\varphi-\cos\varphi=-(3\cos\varphi-\cos3\varphi)$. Derivando, $-3\sin\varphi+3\sin3\varphi=0$, e $\sin3\varphi=\sin\varphi$ dá $\varphi=45^\circ$ no intervalo, com $3\frac{\sqrt2}2+\frac{\sqrt2}2=2\sqrt2$. Para a faixa de violação, escreva $3\cos\varphi-\cos3\varphi=6c-4c^3$ com $c=\cos\varphi$; a equação $6c-4c^3=2$ fatora como $(c-1)(2c^2+2c-1)=0$, com raiz $c=\frac{\sqrt3-1}2$. Logo $|S|&gt;2$ para $0&lt;\varphi&lt;\arccos\frac{\sqrt3-1}2\approx68{,}5^\circ$ (e, por simetria, entre $111{,}5^\circ$ e $180^\circ$).</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="stern-gerlach.html">Stern–Gerlach e o qubit</a></li>
+            <li><a href="observaveis.html">Observáveis e medição</a></li>
+            <li><a href="momento-angular.html">Momento angular: a álgebra</a> (o singleto)</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Matriz densidade (em breve)</li>
+            <li class="soon">Partículas idênticas (em breve)</li>
+            <li class="soon">Modelos de spin: Ising e Heisenberg (em breve)</li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/bell-core.js"></script>
+  <script src="../assets/bell-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

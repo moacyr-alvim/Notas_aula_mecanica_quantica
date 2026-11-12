@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Momento angular: a álgebra — Mecânica quântica</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Momento angular: a álgebra</h1>
+        <p class="lede">Três operadores e um comutador. Só com $[J_x,J_y]=i\hbar J_z$ saem os valores possíveis do momento angular, a fórmula $j(j+1)$, a razão de existirem spins semi-inteiros e as matrizes de qualquer spin — sem coordenadas esféricas e sem equação diferencial.</p>
+        <p class="meta">Usa <a href="incerteza.html#comutador">comutadores</a> e a escada do <a href="oscilador.html#escada">oscilador</a> (o mesmo truque, outra álgebra). O spin ½ de <a href="stern-gerlach.html">Stern–Gerlach</a> aparece como caso particular. Leitura de uns 30 minutos, mais a célula de Python.</p>
+        <ul class="livros">
+          <li><b>Freericks</b>, cap. 9 ("Angular momentum and spin"). <b>Shankar</b>, cap. 12 (pela rotação) e 14 (spin).</li>
+          <li><b>Griffiths</b>, §4.3: primeiro os harmônicos esféricos, depois a álgebra — aqui é ao contrário.</li>
+        </ul>
+      </header>
+
+      <h2 id="algebra" data-toc="A álgebra">O ponto de partida: três comutadores</h2>
+      <p>Chame de momento angular qualquer trio de observáveis $\mathbf J=(J_x,J_y,J_z)$ que satisfaça
+      $$[J_x,J_y]=i\hbar J_z,\qquad[J_y,J_z]=i\hbar J_x,\qquad[J_z,J_x]=i\hbar J_y.$$
+      O momento angular orbital $\mathbf L=\mathbf X\times\mathbf P$ satisfaz (exercício 1, a partir de $[X_j,P_k]=i\hbar\delta_{jk}$); o spin, $\mathbf S=\frac\hbar2\boldsymbol\sigma$, também (das matrizes de Pauli). A razão profunda é que essas são as relações das rotações infinitesimais: $\mathbf J$ é o gerador das rotações, como $P$ é o das translações. Mas a página inteira só usa a álgebra.</p>
+      <p>As três componentes não comutam entre si, então não há estado com as três bem definidas (salvo o caso trivial). Mas o quadrado
+      $$J^2=J_x^2+J_y^2+J_z^2$$
+      comuta com cada uma delas: $[J^2,J_z]=0$ (exercício 2). Escolha, então, uma base comum de autovetores de $J^2$ e de $J_z$, e escreva
+      $$J^2|\lambda,m\rangle=\hbar^2\lambda\,|\lambda,m\rangle,\qquad J_z|\lambda,m\rangle=\hbar m\,|\lambda,m\rangle.$$
+      O trabalho é descobrir quais $\lambda$ e $m$ são possíveis.</p>
+
+      <h2 id="escada" data-toc="Os degraus">Os degraus $J_\pm$</h2>
+      <p>Como no oscilador, combine os dois operadores que não estão diagonais:
+      $$J_\pm=J_x\pm iJ_y,\qquad J_\pm^\dagger=J_\mp.$$
+      As contas de comutador dão
+      $$[J_z,J_\pm]=\pm\hbar J_\pm,\qquad[J^2,J_\pm]=0,$$
+      e daí, exatamente como $a^\dagger$ e $a$: se $|\lambda,m\rangle$ é autovetor, $J_\pm|\lambda,m\rangle$ ainda tem o mesmo $\lambda$ (porque $J_\pm$ comuta com $J^2$) e tem $J_z$ igual a $\hbar(m\pm1)$. Os $J_\pm$ sobem e descem $m$ de um em um, dentro de um mesmo $\lambda$.</p>
+
+      <h2 id="limites" data-toc="Os limites">A escada tem topo e fundo, e daí $j(j+1)$</h2>
+      <p>A escada não pode subir para sempre. Num autovetor, $\langle J^2-J_z^2\rangle=\langle J_x^2+J_y^2\rangle\ge0$, ou seja, $m^2\le\lambda$: para cada $\lambda$ há um $m$ máximo, que vamos chamar de $j$, e um mínimo. No topo, $J_+|\lambda,j\rangle=0$. A identidade que fecha a conta é
+      $$J_-J_+=J_x^2+J_y^2+i[J_x,J_y]=J^2-J_z^2-\hbar J_z.$$
+      Aplicada ao topo: $0=J_-J_+|\lambda,j\rangle=\hbar^2(\lambda-j^2-j)|\lambda,j\rangle$, logo
+      $$\lambda=j(j+1).$$
+      No fundo, com $m_{\min}$ e $J_+J_-=J^2-J_z^2+\hbar J_z$, sai do mesmo jeito $\lambda=m_{\min}(m_{\min}-1)$, e a única solução abaixo de $j$ é $m_{\min}=-j$. Do topo $j$ ao fundo $-j$ se chega por degraus de $1$, então $2j$ é um inteiro:</p>
+      $$\boxed{\,j\in\big\{0,\tfrac12,1,\tfrac32,2,\dots\big\},\qquad m\in\{-j,-j+1,\dots,j\},\qquad J^2=\hbar^2j(j+1).\,}$$
+      <p>A partir de agora o rótulo é $|j,m\rangle$. Cada $j$ dá um espaço de dimensão $2j+1$: o spin ½ de Stern–Gerlach é $j=\frac12$, com dois estados.</p>
+
+      <aside class="box">
+        <p class="tag">Por que $j(j+1)$, e não $j^2$</p>
+        <p>No estado $|j,j\rangle$, o mais alinhado possível com $z$, $\langle J_z^2\rangle=\hbar^2j^2$ e sobra $\langle J_x^2+J_y^2\rangle=\hbar^2j$. A seta nunca aponta exatamente para $z$: se apontasse, $J_x$ e $J_y$ seriam zero com certeza, junto com $J_z$ — três componentes que não comutam bem definidas ao mesmo tempo. O "$+j$" é a incerteza das componentes perpendiculares. Para $j$ grande, $\sqrt{j(j+1)}\approx j+\frac12$, e a diferença relativa some: é o limite clássico.</p>
+      </aside>
+
+      <h2 id="matrizes" data-toc="As matrizes">As matrizes de qualquer spin</h2>
+      <p>Falta normalizar os degraus. Pela identidade acima, $\|J_+|j,m\rangle\|^2=\langle j,m|J_-J_+|j,m\rangle=\hbar^2\big(j(j+1)-m(m+1)\big)$, então
+      $$J_\pm|j,m\rangle=\hbar\sqrt{j(j+1)-m(m\pm1)}\;|j,m\pm1\rangle.$$
+      Isso determina tudo: $J_z$ é diagonal com $\hbar m$, $J_\pm$ têm essas raízes logo acima e logo abaixo da diagonal, e $J_x=\frac12(J_++J_-)$, $J_y=\frac1{2i}(J_+-J_-)$. Para $j=\frac12$, sai $\frac\hbar2\boldsymbol\sigma$, as matrizes de Pauli. Para $j=1$:
+      $$J_x=\frac{\hbar}{\sqrt2}\begin{pmatrix}0&amp;1&amp;0\\1&amp;0&amp;1\\0&amp;1&amp;0\end{pmatrix},\quad J_y=\frac{\hbar}{\sqrt2}\begin{pmatrix}0&amp;-i&amp;0\\i&amp;0&amp;-i\\0&amp;i&amp;0\end{pmatrix},\quad J_z=\hbar\begin{pmatrix}1&amp;0&amp;0\\0&amp;0&amp;0\\0&amp;0&amp;-1\end{pmatrix},$$
+      o spin 1 que a <a href="observaveis.html#python">máquina de medir</a> já tinha usado. Um feixe de átomos de spin 1 num Stern–Gerlach se divide em <b>três</b>.</p>
+
+      <h2 id="orbital" data-toc="Inteiro e semi-inteiro">Inteiros, semi-inteiros e a rotação de $2\pi$</h2>
+      <p>A álgebra permite $j$ semi-inteiro, mas nem todo momento angular usa essa permissão. Para o orbital, $L_z=-i\hbar\,\partial_\varphi$ em coordenadas esféricas, e seus autovetores são $e^{im\varphi}$. Uma função de onda tem que voltar a si mesma depois de uma volta em $\varphi$, e $e^{im\cdot2\pi}=1$ exige $m$ inteiro: <b>o momento angular orbital só tem $\ell$ inteiro</b>. Os semi-inteiros só aparecem como momento angular <em>intrínseco</em>, o spin, que não é rotação de coisa nenhuma no espaço.</p>
+      <p>O preço dos semi-inteiros já apareceu: uma rotação de $2\pi$, $e^{-2\pi iJ_z/\hbar}$, vale $e^{-2\pi im}=(-1)^{2j}$. Para $j$ inteiro é a identidade; para $j$ semi-inteiro é $-I$, o sinal trocado que se viu em <a href="stern-gerlach.html#amplitudes">Stern–Gerlach</a> e na <a href="evolucao-spin.html#larmor">precessão</a>. Partículas de spin semi-inteiro são os férmions; as de spin inteiro, os bósons — uma distinção que, quando houver mais de uma partícula, decide se elas podem ou não ocupar o mesmo estado.</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>A célula monta $J_z$, $J_\pm$, $J_x$, $J_y$ para um $j$ qualquer e confere a álgebra. Complete a matriz de $J_+$ (uma linha, com a fórmula da raiz acima) e ela segue para dois experimentos. Primeiro, Stern–Gerlach com spin 1: um átomo em $m=+1$ medido num ímã girado de $\theta$ sai em $m'=+1,0,-1$ com probabilidades $\cos^4\frac\theta2$, $\frac12\sin^2\theta$, $\sin^4\frac\theta2$, calculadas com a rotação $e^{-i\theta J_y/\hbar}$. Segundo, $j=20$: girando $|j,j\rangle$ de $60^\circ$ e medindo $J_z$, a distribuição de $m'$ se concentra perto de $j\cos60^\circ$, com largura $\sqrt{j/2}\sin60^\circ$ — pequena perto de $j$. É a seta clássica aparecendo, com uma incerteza que cresce só como $\sqrt j$.</p>
+      <div class="pycell" data-title="Matrizes de momento angular e rotações"
+           data-starter="../py/momento_angular_lacunas.py"
+           data-solution="../py/momento_angular_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O orbital obedece à álgebra</p>
+        <p>Com $L_z=XP_y-YP_x$ e as outras componentes por permutação cíclica, use $[X_j,P_k]=i\hbar\delta_{jk}$ para mostrar que $[L_x,L_y]=i\hbar L_z$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$[L_x,L_y]=[YP_z-ZP_y,\,ZP_x-XP_z]$. Dos quatro termos, só sobrevivem os que pareiam uma coordenada com o seu momento: $[YP_z,ZP_x]=Y[P_z,Z]P_x=-i\hbar YP_x$ e $[ZP_y,XP_z]=X[Z,P_z]P_y=i\hbar XP_y$; os outros dois comutam. Com os sinais: $[L_x,L_y]=-i\hbar YP_x+i\hbar XP_y=i\hbar L_z$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. $J^2$ comuta com tudo</p>
+        <p>Mostre que $[J^2,J_z]=0$. <b>Dica:</b> $[J_x^2,J_z]=J_x[J_x,J_z]+[J_x,J_z]J_x$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$[J_x^2,J_z]=J_x(-i\hbar J_y)+(-i\hbar J_y)J_x=-i\hbar(J_xJ_y+J_yJ_x)$ e $[J_y^2,J_z]=J_y(i\hbar J_x)+(i\hbar J_x)J_y=i\hbar(J_yJ_x+J_xJ_y)$. Somam zero, e $[J_z^2,J_z]=0$. Por simetria, o mesmo para $J_x$ e $J_y$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Os comutadores dos degraus</p>
+        <p>Mostre que $[J_z,J_\pm]=\pm\hbar J_\pm$ e que $J_-J_+=J^2-J_z^2-\hbar J_z$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$[J_z,J_x\pm iJ_y]=i\hbar J_y\pm i(-i\hbar J_x)=\pm\hbar(J_x\pm iJ_y)$. E $J_-J_+=(J_x-iJ_y)(J_x+iJ_y)=J_x^2+J_y^2+i(J_xJ_y-J_yJ_x)=J_x^2+J_y^2-\hbar J_z$, e $J_x^2+J_y^2=J^2-J_z^2$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. As componentes perpendiculares</p>
+        <p>No estado $|j,m\rangle$, calcule $\langle J_x\rangle$, $\langle J_y\rangle$ e $\langle J_x^2\rangle$. Confira a desigualdade de Robertson $\Delta J_x\Delta J_y\ge\frac\hbar2|\langle J_z\rangle|$. Em que estados ela vale com igualdade?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$J_\pm$ mudam $m$, então $\langle J_\pm\rangle=0$ e $\langle J_x\rangle=\langle J_y\rangle=0$. Por simetria entre $x$ e $y$ (uma rotação em torno de $z$ não muda $|j,m\rangle$ a menos de fase), $\langle J_x^2\rangle=\langle J_y^2\rangle=\frac12\langle J^2-J_z^2\rangle=\frac{\hbar^2}2\big(j(j+1)-m^2\big)$.</p>
+          <p>Então $\Delta J_x\Delta J_y=\frac{\hbar^2}2\big(j(j+1)-m^2\big)$ contra $\frac{\hbar^2}2|m|$. A diferença é $\frac{\hbar^2}2\big(j(j+1)-m^2-|m|\big)\ge\frac{\hbar^2}{2}(j(j+1)-j^2-j)=0$, com igualdade só em $|m|=j$: os estados do topo e do fundo da escada são os de incerteza mínima.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Spin ½ com spin ½ (aquecimento)</p>
+        <p>Dois spins ½ formam um espaço de dimensão $4$. Com $\mathbf J=\mathbf S^{(1)}+\mathbf S^{(2)}$, mostre que $|{\uparrow\uparrow}\rangle$ tem $j=1$, $m=1$, e aplique $J_-=S_-^{(1)}+S_-^{(2)}$ para achar o estado $|1,0\rangle$. Qual vetor ortogonal a ele tem $m=0$, e que $j$ ele tem?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$J_z|{\uparrow\uparrow}\rangle=\hbar|{\uparrow\uparrow}\rangle$ e $J_+|{\uparrow\uparrow}\rangle=0$: é um topo de escada com $m=1$, logo $j=1$. Com $S_-|{\uparrow}\rangle=\hbar|{\downarrow}\rangle$: $J_-|{\uparrow\uparrow}\rangle=\hbar(|{\downarrow\uparrow}\rangle+|{\uparrow\downarrow}\rangle)$, e pela fórmula $J_-|1,1\rangle=\hbar\sqrt2|1,0\rangle$. Logo $|1,0\rangle=\frac1{\sqrt2}(|{\uparrow\downarrow}\rangle+|{\downarrow\uparrow}\rangle)$.</p>
+          <p>O ortogonal com $m=0$ é $\frac1{\sqrt2}(|{\uparrow\downarrow}\rangle-|{\downarrow\uparrow}\rangle)$. Aplicando $J_+$ dá zero (os dois termos se cancelam), e como $m=0$ é o topo, $j=0$. É o <b>singleto</b>, o protagonista da <a href="emaranhamento.html">página de emaranhamento</a>; os outros três formam o tripleto $j=1$.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="incerteza.html">Comutadores e incerteza</a></li>
+            <li><a href="oscilador.html">Oscilador harmônico: operadores escada</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="emaranhamento.html">Emaranhamento e Bell</a></li>
+            <li class="soon">Harmônicos esféricos (em breve)</li>
+            <li class="soon">Soma de momentos angulares (em breve)</li>
+            <li class="soon">Átomo de hidrogênio (em breve)</li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

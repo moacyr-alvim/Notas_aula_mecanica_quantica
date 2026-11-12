@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Degraus, barreiras e tunelamento — Mecânica quântica</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Degraus, barreiras e tunelamento</h1>
+        <p class="lede">Uma partícula clássica com energia suficiente sempre passa por um degrau, e sem energia suficiente sempre volta. A partícula quântica faz as duas coisas erradas: às vezes volta de onde deveria passar, e às vezes atravessa uma parede mais alta que ela.</p>
+        <p class="meta">Usa <a href="funcao-de-onda.html">a função de onda</a> (a corrente de probabilidade) e <a href="particula-livre.html">a partícula livre</a>. Leitura de uns 30 minutos, com a demo e a célula de Python.</p>
+        <ul class="livros">
+          <li><b>Griffiths</b>, §2.5–2.6 (delta e poço finito, com os coeficientes $R$ e $T$) e os problemas do degrau e da barreira. <b>Shankar</b>, §5.4.</li>
+          <li><b>Freericks</b>, cap. 12, com caixas, degraus e suas aplicações.</li>
+        </ul>
+      </header>
+
+      <h2 id="espalhamento" data-toc="O problema">O problema de espalhamento</h2>
+      <p>Tome um potencial constante por pedaços e $\hbar=m=1$. Numa região onde $V$ vale $V_j$, a equação $-\frac12\varphi''+V_j\varphi=E\varphi$ tem solução
+      $$\varphi=A_je^{ik_jx}+B_je^{-ik_jx},\qquad k_j=\sqrt{2(E-V_j)},$$
+      ondas indo para a direita e para a esquerda se $E&gt;V_j$; se $E&lt;V_j$, $k_j=i\kappa_j$ é imaginário e as "ondas" são exponenciais reais $e^{\mp\kappa_jx}$. Nos pontos de corte, a equação diz que $\varphi''$ tem no máximo um salto, então <b>$\varphi$ e $\varphi'$ são contínuas</b>: duas condições por corte, e são elas que amarram as constantes.</p>
+      <p>O estado que descreve uma partícula vindo da esquerda tem, longe do obstáculo,
+      $$\varphi=\underbrace{e^{ik_0x}}_{\text{incidente}}+\underbrace{r\,e^{-ik_0x}}_{\text{refletida}}\ \ \text{à esquerda},\qquad\varphi=\underbrace{t\,e^{ik_nx}}_{\text{transmitida}}\ \ \text{à direita},$$
+      e nada vindo da direita. Ele não é normalizável — descreve um feixe estacionário, não uma partícula —, mas as <b>correntes</b> fazem sentido: a incidente vale $k_0$, a refletida $k_0|r|^2$, a transmitida $k_n|t|^2$. Daí
+      $$R=|r|^2,\qquad T=\frac{k_n}{k_0}|t|^2,\qquad R+T=1.$$
+      A última igualdade é a <a href="funcao-de-onda.html#conservacao">conservação da probabilidade</a>: num estado estacionário, a corrente não depende de $x$. Um pacote de verdade, feito de muitos $k$ próximos, se divide em dois pedaços com probabilidades $R$ e $T$ — é o que a célula de Python mostra.</p>
+
+      <h2 id="degrau" data-toc="O degrau">O degrau: voltar sem bater</h2>
+      <p>Com $V=0$ para $x&lt;0$ e $V=V_0$ para $x&gt;0$, e $E&gt;V_0$, as duas condições em $x=0$ dão $1+r=t$ e $k_1(1-r)=k_2t$, com $k_1=\sqrt{2E}$ e $k_2=\sqrt{2(E-V_0)}$. Então
+      $$r=\frac{k_1-k_2}{k_1+k_2},\qquad R=\Big(\frac{k_1-k_2}{k_1+k_2}\Big)^2.$$
+      A partícula tem energia de sobra para subir o degrau e, mesmo assim, <b>volta</b> com probabilidade $R&gt;0$. A fórmula é a mesma da reflexão de luz numa interface entre meios de índices diferentes, e por isso vale também para um degrau <em>para baixo</em> ($V_0&lt;0$): um elétron que cai num poço pode ser refletido na beirada. O que reflete a onda é a mudança brusca do comprimento de onda, não a altura.</p>
+      <p>Com $E&lt;V_0$, $k_2=i\kappa$ e $R=|r|^2=1$: tudo volta, como classicamente. Mas a função de onda não é zero dentro do degrau: ela cai como $e^{-\kappa x}$, com $\kappa=\sqrt{2(V_0-E)}$. A partícula <b>penetra</b> na região proibida até uma profundidade da ordem de $1/\kappa$ — e se a região proibida acabar antes disso, ela sai do outro lado.</p>
+
+      <h2 id="tunelamento" data-toc="Tunelamento">A barreira: tunelamento</h2>
+      <p>Para a barreira $V=V_0$ em $[0,a]$, as quatro condições de continuidade dão (exercício 2), para $E&lt;V_0$,
+      $$T=\Big[1+\frac{V_0^2\sinh^2(\kappa a)}{4E(V_0-E)}\Big]^{-1}\ \approx\ 16\,\frac{E}{V_0}\Big(1-\frac{E}{V_0}\Big)\,e^{-2\kappa a}\quad(\kappa a\gg1).$$
+      Positiva, por menor que seja: a partícula atravessa uma parede mais alta que a sua energia. É o <b>tunelamento</b>, e a dependência exponencial em $\kappa a\propto a\sqrt{m(V_0-E)}$ é o que o torna ao mesmo tempo onipresente e invisível no mundo macroscópico. Ele explica o decaimento alfa (Gamow, 1928: a partícula alfa tunela pela barreira coulombiana do núcleo, e energias alfa que diferem por um fator de dois dão meias-vidas que diferem por mais de vinte ordens de grandeza), o microscópio de tunelamento (a corrente cai por um fator perto de $10$ a cada ångström de afastamento, o que dá resolução atômica), e a memória flash do seu telefone.</p>
+      <p>Para $E&gt;V_0$, $\sinh(\kappa a)$ vira $\sin(qa)$ com $q=\sqrt{2(E-V_0)}$, e aparece outro fenômeno ondulatório: $T=1$ exatamente quando $qa=n\pi$. A barreira fica <b>transparente</b> quando a sua largura é um número inteiro de meios comprimentos de onda — as reflexões nas duas bordas se cancelam, como numa película antirreflexo.</p>
+
+      <h2 id="ressonancias" data-toc="Ressonâncias">Ressonâncias: o poço e a barreira dupla</h2>
+      <p>Um <b>poço</b> ($V=-V_0$ em $[0,a]$) também reflete — é o degrau para baixo, duas vezes —, e também fica transparente quando $qa=n\pi$, agora com $q=\sqrt{2(E+V_0)}$. Elétrons lentos atravessando átomos de gás nobre mostram isso: em certas energias o gás fica quase transparente (o efeito Ramsauer–Townsend, que intrigou os físicos clássicos nos anos 1920).</p>
+      <p>Mais surpreendente é a <b>barreira dupla</b>. Cada barreira sozinha deixa passar pouco; as duas juntas, numa energia certa, deixam passar <em>tudo</em>. Entre as barreiras há um poço, e o poço tem estados quase ligados — que só não são ligados de verdade porque vazam por tunelamento. Quando a energia incidente coincide com a de um deles, a onda se acumula lá dentro, as reflexões se cancelam e $T=1$. Fora da ressonância, $T$ é o produto de duas probabilidades pequenas. É o princípio do diodo de tunelamento ressonante, que usa exatamente essa seletividade em energia.</p>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
+      <p>À esquerda, o potencial (vermelho), a energia $E$ (tracejada) e, desenhado em volta da linha de $E$, o estado estacionário de espalhamento: $\mathrm{Re}\,\varphi$ em preto e $|\varphi|$ em violeta. À direita, $T(E)$ em violeta e $R(E)$ em vermelho, com a resposta clássica tracejada; o ponto é o $E$ atual. Tudo com $\hbar=m=1$, calculado casando $\varphi$ e $\varphi'$ nos cortes.</p>
+
+      <div class="demo" id="demo-bar">
+        <div class="controls">
+          <label>Potencial <select id="br-preset" aria-label="Potencial"></select></label>
+        </div>
+        <div class="controls">
+          <label>E <input type="range" id="br-E" min="0.02" max="6" step="any" value="0.6" aria-label="Energia"><output id="br-Ev">0,6</output></label>
+          <label>V₀ <input type="range" id="br-V0" min="0.2" max="4" step="0.05" value="1" aria-label="Altura do potencial"><output id="br-V0v">1</output></label>
+          <label>a <input type="range" id="br-a" min="0.2" max="4" step="0.05" value="1.5" aria-label="Largura"><output id="br-av">1,5</output></label>
+          <button id="br-ress" type="button">próximo pico de T</button>
+        </div>
+        <div class="panels two">
+          <canvas id="br-psi" role="img" aria-label="Potencial, energia e o estado de espalhamento"></canvas>
+          <canvas id="br-T" role="img" aria-label="Coeficientes de transmissão e reflexão contra a energia"></canvas>
+        </div>
+        <div class="readout" id="br-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>Re φ</span>
+          <span><i style="border-color:var(--carac)"></i>|φ| ; T(E)</span>
+          <span><i style="border-color:var(--choque)"></i>potencial ; R(E)</span>
+          <span><i style="border-top-style:dashed;border-color:var(--aux)"></i>T clássico</span>
+        </div>
+      </div>
+
+      <p>Para tentar:</p>
+      <ol>
+        <li>Na <b>barreira</b>, com $E&lt;V_0$, olhe a função de onda: oscila à esquerda (incidente mais refletida, com nós onde as duas se cancelam), decai dentro da barreira, e sai do outro lado com amplitude pequena e constante. Aumente $a$ e veja $T$ despencar — e compare com a aproximação exponencial no texto abaixo dos gráficos.</li>
+        <li>Ainda na barreira, suba $E$ acima de $V_0$ e procure os pontos em que $T$ encosta em $1$. Confira que são os $qa=n\pi$.</li>
+        <li>No <b>degrau</b>, com $E$ um pouco acima de $V_0$, a reflexão é grande: perto de $E=V_0$ ela tende a $1$. À direita do degrau, $|\varphi|$ é constante (só onda transmitida); à esquerda, oscila.</li>
+        <li>Na <b>barreira dupla</b>, abaixo de $V_0$, $T$ é quase zero em quase toda parte — e tem picos finíssimos que chegam a $1$. Como eles são estreitos demais para acertar arrastando, use <b>próximo pico de T</b>: $E$ pula para o topo do pico seguinte. Veja $|\varphi|$ enorme entre as barreiras: a onda presa no poço do meio. Aumente $a$: os picos ficam mais finos (o estado quase ligado vaza mais devagar), e com $a=3$ o primeiro já tem largura de alguns décimos de milésimo.</li>
+      </ol>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo: um pacote contra a parede</h2>
+      <p>Os coeficientes $R$ e $T$ são de ondas planas. O que acontece com um <em>pacote</em>? A célula usa o método <b>split-step</b>: em cada passo, meio passo do potencial (multiplicar por $e^{-iV\Delta t/2}$, diagonal na base de posição), um passo cinético exato (na base de momentos, pela FFT, como na <a href="particula-livre.html#python">partícula livre</a>) e outro meio passo do potencial. Complete o meio passo e compare a probabilidade de transmissão medida no fim com a previsão: a média de $T(E)$ sobre a distribuição de momentos do pacote.</p>
+      <div class="pycell" data-title="Split-step: pacote contra barreira"
+           data-starter="../py/barreira_lacunas.py"
+           data-solution="../py/barreira_solucao.py"></div>
+      <p>No instante do choque, à esquerda da barreira aparecem franjas: é a parte que chega interferindo com a que já voltou. Depois, o pacote se separa em dois, e a área de cada pedaço é $R$ e $T$. O split-step comete um erro de ordem $\Delta t^2$ em cada passo, porque as partes cinética e potencial não comutam; com $\Delta t$ grande demais, a quebra brusca da barreira espalha ruído em comprimentos de onda curtos — experimente $\Delta t=0{,}05$.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O degrau, por inteiro</p>
+        <p>Deduza $r$ e $t$ para o degrau com $E&gt;V_0$ e confira $R+T=1$. Por que $T$ não é $|t|^2$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>De $1+r=t$ e $k_1(1-r)=k_2t$: $r=\frac{k_1-k_2}{k_1+k_2}$, $t=\frac{2k_1}{k_1+k_2}$. Então $R+T=\frac{(k_1-k_2)^2+\frac{k_2}{k_1}4k_1^2}{(k_1+k_2)^2}=\frac{(k_1-k_2)^2+4k_1k_2}{(k_1+k_2)^2}=1$.</p>
+          <p>$T$ é razão de <em>correntes</em>, e a corrente de $te^{ik_2x}$ é $k_2|t|^2$, não $k_1|t|^2$: do lado de lá a partícula anda mais devagar. Repare que $|t|&gt;1$ é possível ($t=1+r$ com $r&gt;0$): a amplitude aumenta, mas a corrente não.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. A fórmula da barreira</p>
+        <p>Para $E&lt;V_0$, escreva $\varphi=e^{ikx}+re^{-ikx}$ em $x&lt;0$, $Ce^{\kappa x}+De^{-\kappa x}$ em $[0,a]$ e $te^{ikx}$ em $x&gt;a$. Elimine $C$, $D$, $r$ e mostre que $\frac1{|t|^2}=1+\frac{(k^2+\kappa^2)^2}{4k^2\kappa^2}\sinh^2(\kappa a)$. Conclua a fórmula de $T$ do texto.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Em $x=a$: $Ce^{\kappa a}+De^{-\kappa a}=te^{ika}$ e $\kappa(Ce^{\kappa a}-De^{-\kappa a})=ikte^{ika}$, logo $C=\frac{t}2\big(1+\frac{ik}\kappa\big)e^{(ik-\kappa)a}$ e $D=\frac t2\big(1-\frac{ik}\kappa\big)e^{(ik+\kappa)a}$. Em $x=0$, somando $1+r=C+D$ com $ik(1-r)=\kappa(C-D)$ dividido por $ik$: $2=C\big(1+\frac\kappa{ik}\big)+D\big(1-\frac\kappa{ik}\big)$. Substituindo,
+          $$\frac{2e^{-ika}}{t}=2\cosh\kappa a+i\Big(\frac\kappa k-\frac k\kappa\Big)\sinh\kappa a,$$
+          e $\frac1{|t|^2}=\cosh^2\kappa a+\frac14\big(\frac\kappa k-\frac k\kappa\big)^2\sinh^2\kappa a=1+\frac14\big(\frac\kappa k+\frac k\kappa\big)^2\sinh^2\kappa a$. Com $k^2=2E$ e $\kappa^2=2(V_0-E)$: $\frac{(k^2+\kappa^2)^2}{4k^2\kappa^2}=\frac{V_0^2}{4E(V_0-E)}$. Como a corrente é a mesma dos dois lados ($k$ igual), $T=|t|^2$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. O microscópio de tunelamento</p>
+        <p>Num STM, elétrons tunelam do metal para a ponta através de um vão de vácuo; a barreira tem altura igual à função trabalho, $\phi\approx4$ eV acima da energia dos elétrons. Estime por quanto a corrente diminui quando o vão aumenta $1$ Å. ($\hbar^2/2m_e\approx3{,}81$ eV·Å².)</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\kappa=\sqrt{2m\phi}/\hbar=\sqrt{\phi/(3{,}81\ \text{eV·Å}^2)}=\sqrt{4/3{,}81}\ \text{Å}^{-1}\approx1{,}02\ \text{Å}^{-1}$. A corrente é proporcional a $T\propto e^{-2\kappa d}$, então aumentar $d$ de $1$ Å multiplica a corrente por $e^{-2{,}05}\approx0{,}13$: cai quase dez vezes. Uma ponta com um átomo saliente a $1$ Å dos vizinhos leva quase toda a corrente — por isso o STM enxerga átomos isolados.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Transparência</p>
+        <p>(a) Mostre, a partir da fórmula para $E&gt;V_0$, que $T=1$ quando $qa=n\pi$. (b) Para $V_0=1$ e $a=1{,}5$ (os valores iniciais da demo), em que energias isso acontece abaixo de $E=6$? (c) Interprete: por que, nesses casos, as duas reflexões se cancelam?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\sin(qa)=0$ zera o termo extra. (b) $q=n\pi/a$, $E=V_0+\frac{q^2}2=1+\frac{n^2\pi^2}{2\cdot2{,}25}$: $n=1$ dá $E\approx3{,}19$; $n=2$ já passa de $6$ ($\approx9{,}8$). Só uma, perto de $3{,}19$ — confira na demo.</p>
+          <p>(c) A onda refletida na entrada e a refletida na saída (depois de ir e voltar dentro da barreira) diferem pelo caminho $2a$, que vale um número inteiro de comprimentos de onda $2\pi/q$, e pelo sinal oposto das duas reflexões (uma sobe o degrau, a outra desce). Diferença de fase de $\pi$: interferência destrutiva, e nada volta.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="funcao-de-onda.html">A função de onda e a equação de Schrödinger</a></li>
+            <li><a href="particula-livre.html">Partícula livre e pacotes de onda</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Poço finito e estados ligados (em breve)</li>
+            <li class="soon">WKB e o tunelamento exponencial (em breve)</li>
+            <li><a href="oscilador.html">Oscilador harmônico</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/barreira-core.js"></script>
+  <script src="../assets/barreira-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

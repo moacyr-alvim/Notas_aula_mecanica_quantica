@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oscilador harmônico: operadores escada — Mecânica quântica</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Oscilador harmônico: operadores escada</h1>
+        <p class="lede">O espectro inteiro sai sem resolver equação diferencial nenhuma: fatora-se o hamiltoniano, descobre-se uma escada, e o degrau mais baixo dá o estado fundamental. É o método preferido do Freericks, e é a porta para a teoria quântica de campos.</p>
+        <p class="meta">Usa <a href="incerteza.html">comutadores e incerteza</a> ($[x,p]=i\hbar$) e o básico de <a href="evolucao-spin.html#schrodinger">evolução no tempo</a>. Leitura de uns 35 minutos, com a demo e a célula de Python.</p>
+        <ul class="livros">
+          <li><b>Freericks</b>, cap. 7 — mais de cem páginas, quase tudo com operadores. <b>Shankar</b>, cap. 7, com os dois métodos lado a lado.</li>
+          <li><b>Griffiths</b>, §2.3: primeiro o algébrico, depois a série de potências que dá os polinômios de Hermite.</li>
+        </ul>
+      </header>
+
+      <h2 id="problema" data-toc="Por que o oscilador">Por que o oscilador</h2>
+      <p>O hamiltoniano é
+      $$H=\frac{p^2}{2m}+\frac12m\omega^2x^2.$$
+      Ele importa muito mais do que molas. Perto de um mínimo, qualquer potencial é quadrático; um cristal é um monte de osciladores acoplados, e seus modos normais quantizados são os <em>fônons</em>; cada modo do campo eletromagnético numa caixa é um oscilador, e seus degraus são os <em>fótons</em>. Resolver o oscilador por operadores é resolver tudo isso de uma vez.</p>
+      <p>Mude a escala para tirar as constantes: com $x$ medido em $\sqrt{\hbar/m\omega}$, $p$ em $\sqrt{\hbar m\omega}$ e energia em $\hbar\omega$, o problema fica
+      $$H=\tfrac12(p^2+x^2),\qquad[x,p]=i.$$</p>
+
+      <h2 id="fatorar" data-toc="Fatorar">Fatorar o hamiltoniano</h2>
+      <p>Se $x$ e $p$ fossem números, $p^2+x^2=(x-ip)(x+ip)$. Como operadores, a ordem importa, e a correção é exatamente o comutador. Defina
+      $$a=\frac{x+ip}{\sqrt2},\qquad a^\dagger=\frac{x-ip}{\sqrt2}.$$
+      Então $a^\dagger a=\frac12(x^2+p^2+i[x,p])=\frac12(x^2+p^2)-\frac12$, ou seja,
+      $$H=a^\dagger a+\tfrac12,\qquad[a,a^\dagger]=1.$$
+      É a <b>fatorização</b>: um hamiltoniano escrito como "algo vezes o seu adjunto, mais uma constante". O Freericks transforma essa ideia (que é de Schrödinger) num método geral, que resolve também o hidrogênio — assunto de uma página futura.</p>
+
+      <h2 id="escada" data-toc="A escada">A escada</h2>
+      <p>Chame $N=a^\dagger a$. Duas observações fazem todo o trabalho.</p>
+      <p><b>1. $N\ge0$.</b> Para qualquer estado, $\langle\psi|N|\psi\rangle=\langle a\psi|a\psi\rangle=\|a\psi\|^2\ge0$. Os autovalores de $N$ não são negativos.</p>
+      <p><b>2. $a$ desce e $a^\dagger$ sobe.</b> Da regra de Leibniz, $[N,a]=[a^\dagger,a]a=-a$ e $[N,a^\dagger]=a^\dagger$. Então, se $N|\nu\rangle=\nu|\nu\rangle$,
+      $$N\,(a|\nu\rangle)=(aN-a)|\nu\rangle=(\nu-1)\,a|\nu\rangle,\qquad N\,(a^\dagger|\nu\rangle)=(\nu+1)\,a^\dagger|\nu\rangle.$$
+      Aplicar $a$ repetidamente desce os autovalores de um em um. Pela observação 1, a descida tem que parar — e a única maneira de parar é chegar num vetor que $a$ anula. Seja $|0\rangle$ esse vetor: $a|0\rangle=0$, logo $N|0\rangle=0$ e
+      $$E_0=\tfrac12.$$
+      Subindo a partir dele, $|n\rangle\propto(a^\dagger)^n|0\rangle$ tem $N=n$, e o espectro todo é
+      $$\boxed{\,E_n=\big(n+\tfrac12\big)\hbar\omega,\qquad n=0,1,2,\dots\,}$$
+      Níveis igualmente espaçados — por isso um oscilador quântico pode emitir ou absorver energia só em pacotes de $\hbar\omega$ — e um mínimo de $\frac12\hbar\omega$, a <a href="incerteza.html#ponto-zero">energia de ponto zero que a incerteza tinha previsto</a>. Normalizando, com $\langle n|aa^\dagger|n\rangle=\langle n|(N+1)|n\rangle=n+1$:
+      $$a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle,\qquad a|n\rangle=\sqrt n\,|n-1\rangle,\qquad|n\rangle=\frac{(a^\dagger)^n}{\sqrt{n!}}|0\rangle.$$</p>
+
+      <details>
+        <summary>Por que a escada não pode parar entre dois inteiros, e por que só há uma</summary>
+        <div class="body">
+          <p>Se existisse um autovalor $\nu$ não inteiro, descendo chegaríamos a um $\nu-k\in(-1,0)$, negativo — impossível pela observação 1. A descida para exatamente quando $a|\nu-k\rangle=0$, o que força $\nu-k=\|a|\nu-k\rangle\|^2/\langle\cdots\rangle=0$. Logo $\nu$ é inteiro.</p>
+          <p>Que só há <em>uma</em> escada (sem degenerescência) é a parte que precisa de representação: na base de posição, $a|0\rangle=0$ é a EDO de primeira ordem $(x+\frac{d}{dx})\psi_0=0$, que tem uma solução só, a menos de constante. Em sistemas com mais graus de liberdade podem existir várias escadas, rotuladas por outros números quânticos.</p>
+        </div>
+      </details>
+
+      <h2 id="hermite" data-toc="As funções de onda">As funções de onda</h2>
+      <p>Na base de posição, $p=-i\frac{d}{dx}$, e $a=\frac1{\sqrt2}\big(x+\frac{d}{dx}\big)$. A condição $a\psi_0=0$ é $\psi_0'=-x\psi_0$:
+      $$\psi_0(x)=\pi^{-1/4}\,e^{-x^2/2},$$
+      a gaussiana — de <a href="incerteza.html#minimo">incerteza mínima</a>, o que não é coincidência. Os outros vêm de graça, aplicando $a^\dagger=\frac1{\sqrt2}\big(x-\frac{d}{dx}\big)$: cada aplicação multiplica por um polinômio de grau um a mais, e
+      $$\psi_n(x)=\frac{1}{\sqrt{2^nn!\sqrt\pi}}\,H_n(x)\,e^{-x^2/2},$$
+      com $H_n$ os polinômios de Hermite ($H_0=1$, $H_1=2x$, $H_2=4x^2-2,\dots$). Duas propriedades à vista: $\psi_n$ tem $n$ zeros, e paridade $(-1)^n$.</p>
+      <p>Para $n$ grande, $|\psi_n|^2$ oscila depressa, mas na média se aproxima da densidade de uma partícula clássica com a mesma energia, $\frac{1}{\pi\sqrt{2E-x^2}}$, que é maior perto dos pontos de retorno (onde a partícula anda devagar) e zero fora deles. A diferença que sobra é a cauda que vaza para a região classicamente proibida — o mesmo vazamento da <a href="barreira.html#degrau">barreira</a>.</p>
+
+      <h2 id="coerente" data-toc="O estado coerente">O estado coerente: o pêndulo quântico</h2>
+      <p>Nenhum autoestado se mexe — são estacionários. Onde está a massa oscilando? Procure um estado que seja autovetor do operador de <em>descida</em>,
+      $$a|\alpha\rangle=\alpha|\alpha\rangle,\qquad\alpha\in\mathbb C.$$
+      Expandindo $|\alpha\rangle=\sum c_n|n\rangle$, a condição dá $c_{n+1}\sqrt{n+1}=\alpha c_n$, ou seja
+      $$|\alpha\rangle=e^{-|\alpha|^2/2}\sum_{n\ge0}\frac{\alpha^n}{\sqrt{n!}}|n\rangle.$$
+      Na evolução, $c_n$ ganha $e^{-i(n+\frac12)t}$, e isso é o mesmo que trocar $\alpha$ por $\alpha e^{-it}$ (mais uma fase global): <b>um estado coerente continua coerente</b>, com o rótulo girando no plano complexo. Como $\langle a\rangle=\alpha(t)$,
+      $$\langle x\rangle=\sqrt2\,|\alpha|\cos(t-\arg\alpha),\qquad\langle p\rangle=-\sqrt2\,|\alpha|\sin(t-\arg\alpha):$$
+      o movimento clássico, exato. Na base de posição, $|\alpha\rangle$ é a gaussiana do estado fundamental deslocada e com momento, e ela <b>não se espalha</b>: $\Delta x=\Delta p=\frac1{\sqrt2}$ o tempo todo. A ocupação dos níveis é a distribuição de Poisson de média $|\alpha|^2$. É o estado da luz de um laser, e o mais próximo de clássico que a mecânica quântica permite.</p>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
+      <p>À esquerda, o potencial (vermelho), os níveis $n+\frac12$ e a densidade $|\psi(x,t)|^2$ desenhada sobre a linha da energia média. À direita, o plano de fase: a trajetória de $(\langle x\rangle,\langle p\rangle)$ num período, o círculo clássico de mesma energia (tracejado) e a elipse de incerteza no instante $t$, feita dos desvios e da covariância.</p>
+
+      <div class="demo" id="demo-osc">
+        <div class="controls">
+          <label>Estado <select id="os-estado" aria-label="Estado"></select></label>
+          <label class="check"><input type="checkbox" id="os-classica"> densidade clássica</label>
+        </div>
+        <div class="controls">
+          <label>n <input type="range" id="os-n" min="0" max="20" step="1" value="3" aria-label="Nível n"><output id="os-nv">3</output></label>
+          <label>α <input type="range" id="os-alfa" min="0" max="3.5" step="0.1" value="2" aria-label="Amplitude alfa"><output id="os-alfav">2</output></label>
+        </div>
+        <div class="controls">
+          <label>t <input type="range" id="os-t" min="0" max="6.2832" step="0.005" value="0" aria-label="Tempo"><output id="os-tv">0</output></label>
+          <button id="os-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="os-onda" class="alto" role="img" aria-label="Potencial, níveis de energia e densidade de probabilidade"></canvas>
+          <canvas id="os-fase" class="alto" role="img" aria-label="Plano de fase com a trajetória das médias e a elipse de incerteza"></canvas>
+        </div>
+        <div class="readout" id="os-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac)"></i>|ψ|² ; médias e elipse</span>
+          <span><i style="border-color:var(--choque)"></i>potencial</span>
+          <span><i style="border-top-style:dashed;border-color:var(--aux)"></i>clássico</span>
+        </div>
+      </div>
+
+      <p>Para tentar:</p>
+      <ol>
+        <li>No <b>estado coerente</b>, anime: o calombo vai e volta sem mudar de forma, e a elipse é um círculo de raio fixo rodando sobre a órbita clássica. $\Delta x\cdot\Delta p$ fica em $0{,}5$ o tempo todo. Ponha $\alpha=0$: é o estado fundamental, parado no centro.</li>
+        <li>Num <b>autoestado</b>, nada se mexe (a elipse é um círculo centrado na origem, de raio $\sqrt{n+\frac12}$). Ligue a densidade clássica e suba $n$ até $20$: a média das oscilações cola na curva clássica, com picos nos pontos de retorno e uma cauda que vaza.</li>
+        <li>Na <b>superposição de $|0\rangle$ e $|1\rangle$</b>, a densidade balança de um lado para o outro com período $2\pi$ — a frequência de Bohr $E_1-E_0=1$.</li>
+        <li>No <b>gato</b> $|\alpha\rangle+|{-\alpha}\rangle$, dois calombos vão e voltam em sentidos opostos. Pare em $t=\pi/2$, quando se cruzam no centro: aparecem <b>franjas de interferência</b>. Duas "bolas" clássicas se cruzariam sem perceber; duas partes de uma mesma função de onda interferem. O exercício 5 calcula o espaçamento.</li>
+      </ol>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo: o oscilador como matriz</h2>
+      <p>Na base $|0\rangle,\dots,|N-1\rangle$, $a$ é uma matriz com $\sqrt1,\sqrt2,\dots$ logo acima da diagonal. Complete essa matriz e a célula mostra três coisas. Primeiro, a truncagem cobra um preço: $[a,a^\dagger]$ é a identidade exceto no último elemento, que vale $-(N-1)$ — o mesmo fenômeno do <a href="dirac.html#infinito">comutador canônico que não cabe em matriz finita</a>. Segundo, os autovetores de uma grade de diferenças finitas coincidem com as funções de Hermite. Terceiro, a base do oscilador é ótima para <em>outros</em> problemas: com um termo anarmônico $\lambda x^4$, a energia do estado fundamental converge exponencialmente com o tamanho da base, e uma base de $10$ estados já ganha de uma grade de $1200$ pontos.</p>
+      <div class="pycell" data-title="Operadores escada como matrizes"
+           data-starter="../py/oscilador_lacunas.py"
+           data-solution="../py/oscilador_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. As contas da fatorização</p>
+        <p>Com $[x,p]=i$, mostre que $[a,a^\dagger]=1$ e que $x=\frac{a+a^\dagger}{\sqrt2}$, $p=\frac{a-a^\dagger}{i\sqrt2}$. Calcule também $aa^\dagger$ em termos de $H$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$[a,a^\dagger]=\frac12[x+ip,x-ip]=\frac12(-i[x,p]+i[p,x])=\frac12(1+1)=1$. Somando e subtraindo as definições, $a+a^\dagger=\sqrt2x$ e $a-a^\dagger=\sqrt2ip$. E $aa^\dagger=a^\dagger a+1=H+\frac12$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Médias sem integrais</p>
+        <p>No estado $|n\rangle$, calcule $\langle x\rangle$, $\langle x^2\rangle$, $\langle p^2\rangle$ usando só $a$ e $a^\dagger$. Conclua que $\Delta x\Delta p=n+\frac12$ e que as energias cinética e potencial médias são iguais (teorema do virial).</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\langle n|a|n\rangle=\sqrt n\langle n|n-1\rangle=0$, idem para $a^\dagger$: $\langle x\rangle=\langle p\rangle=0$. $x^2=\frac12(a^2+a^{\dagger2}+aa^\dagger+a^\dagger a)$; os dois primeiros mudam $n$ de $\pm2$ e têm média zero, e $aa^\dagger+a^\dagger a=2N+1$. Logo $\langle x^2\rangle=n+\frac12$, e do mesmo modo $\langle p^2\rangle=n+\frac12$. Então $\Delta x\Delta p=n+\frac12$ (o mínimo $\frac12$ só no fundamental) e $\langle p^2/2\rangle=\langle x^2/2\rangle=\frac12(n+\frac12)$, metade da energia cada.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Subindo um degrau</p>
+        <p>Calcule $\psi_1=a^\dagger\psi_0$ e $\psi_2=\frac{1}{\sqrt2}a^\dagger\psi_1$ explicitamente. Confira o número de zeros, a paridade e a normalização de $\psi_1$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$a^\dagger\psi_0=\frac1{\sqrt2}(x\psi_0-\psi_0')=\frac1{\sqrt2}(x+x)\psi_0=\sqrt2x\,\pi^{-1/4}e^{-x^2/2}$: um zero, ímpar, e $\int2x^2\pi^{-1/2}e^{-x^2}dx=2\cdot\frac12=1$. Depois, $\psi_2=\frac1{\sqrt2}\cdot\frac{1}{\sqrt2}(x\psi_1-\psi_1')$ com $\psi_1'=\sqrt2\pi^{-1/4}(1-x^2)e^{-x^2/2}$, o que dá $\psi_2=\frac{1}{\sqrt2}\pi^{-1/4}(2x^2-1)e^{-x^2/2}$: par, com dois zeros em $\pm\frac1{\sqrt2}$. É $\frac{H_2}{\sqrt{8\sqrt\pi}}e^{-x^2/2}$ com $H_2=4x^2-2$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. O estado coerente por dentro</p>
+        <p>(a) Confira que a série de $|\alpha\rangle$ é normalizada e que $a|\alpha\rangle=\alpha|\alpha\rangle$. (b) Mostre que a probabilidade de encontrar $n$ quanta é Poisson de média $|\alpha|^2$, e calcule $\langle E\rangle$. (c) Por que $a^\dagger$ não tem autovetores?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\sum|c_n|^2=e^{-|\alpha|^2}\sum\frac{|\alpha|^{2n}}{n!}=1$. E $a|\alpha\rangle=e^{-|\alpha|^2/2}\sum_{n\ge1}\frac{\alpha^n\sqrt n}{\sqrt{n!}}|n-1\rangle=\alpha\,e^{-|\alpha|^2/2}\sum_{m\ge0}\frac{\alpha^m}{\sqrt{m!}}|m\rangle$.</p>
+          <p>(b) $P(n)=e^{-|\alpha|^2}\frac{|\alpha|^{2n}}{n!}$: Poisson com média $|\alpha|^2$. Então $\langle E\rangle=\langle N\rangle+\frac12=|\alpha|^2+\frac12$, e a energia clássica da órbita de amplitude $\sqrt2|\alpha|$ é $|\alpha|^2$ — o $\frac12$ é o ponto zero.</p>
+          <p>(c) Se $a^\dagger\sum c_n|n\rangle=\lambda\sum c_n|n\rangle$, comparando o coeficiente de $|0\rangle$: $0=\lambda c_0$. Se $\lambda\ne0$, $c_0=0$, e daí $c_{n}\sqrt{n+1}=\lambda c_{n+1}$ força todos os $c_n=0$. Se $\lambda=0$, $a^\dagger$ é injetiva. Não há autovetor: subir sempre muda o estado.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. As franjas do gato</p>
+        <p>Para $|\alpha\rangle+|{-\alpha}\rangle$ com $\alpha$ real, mostre que só os $n$ pares aparecem. Em $t=\pi/2$, o estado é $|{-i\alpha}\rangle+|i\alpha\rangle$ (a menos de fase): dois pacotes em $x=0$ com momentos $\pm\sqrt2\alpha$. Mostre que $|\psi|^2\propto e^{-x^2}\big(1+\cos(2\sqrt2\,\alpha x)\big)$ e ache o espaçamento das franjas. Confira na demo com $\alpha=2$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Os coeficientes de $|\alpha\rangle$ e $|{-\alpha}\rangle$ são $\propto\alpha^n$ e $(-\alpha)^n$: somam $2\alpha^n$ para $n$ par e se cancelam para $n$ ímpar.</p>
+          <p>Um estado coerente de rótulo $\beta=i\gamma$ ($\gamma$ real) é a gaussiana $\pi^{-1/4}e^{-x^2/2}$ centrada em $\sqrt2\,\mathrm{Re}\beta=0$, com momento $\sqrt2\gamma$: $\propto e^{-x^2/2}e^{i\sqrt2\gamma x}$. Somando $\gamma=\pm\alpha$: $\psi\propto e^{-x^2/2}\cos(\sqrt2\alpha x)$, e $|\psi|^2\propto e^{-x^2}\cos^2(\sqrt2\alpha x)=\frac12e^{-x^2}(1+\cos(2\sqrt2\alpha x))$. Franjas com espaçamento $\frac{2\pi}{2\sqrt2\alpha}=\frac{\pi}{\sqrt2\alpha}$; com $\alpha=2$, $\approx1{,}11$. Quanto mais separados os dois "gatos" (mais clássico o estado), mais finas as franjas — e mais fácil destruí-las com qualquer perturbação.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="incerteza.html">Comutadores e incerteza</a></li>
+            <li><a href="funcao-de-onda.html">A função de onda e a equação de Schrödinger</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="momento-angular.html">Momento angular: a álgebra</a> (outra escada)</li>
+            <li class="soon">O método da fatorização (em breve)</li>
+            <li class="soon">Segunda quantização (em breve)</li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/osc-core.js"></script>
+  <script src="../assets/osc-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

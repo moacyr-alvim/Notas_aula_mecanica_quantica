@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stern–Gerlach e o qubit — Mecânica quântica</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Stern–Gerlach e o qubit</h1>
+        <p class="lede">Um ímã separa um feixe de átomos em dois — nunca em três, nunca num borrão. Três ímãs em série bastam para derrubar a ideia de que o átomo <em>tem</em> um valor de spin em cada direção, e para mostrar que as probabilidades da mecânica quântica são quadrados de outra coisa.</p>
+        <p class="meta">Porta de entrada: não usa nenhuma outra página. Leitura de uns 30 minutos, com a demo.</p>
+        <ul class="livros">
+          <li><b>Freericks</b>, cap. 1 e 2: o livro inteiro começa aqui, com ímãs em série e sem cálculo.</li>
+          <li><b>Griffiths</b>, §4.4: o spin ½ aparece depois do hidrogênio, já com matrizes de Pauli.</li>
+          <li><b>Shankar</b>, cap. 14. Fora dos três: Feynman, <em>Lectures</em> vol. III, cap. 5–6, e Sakurai, cap. 1.</li>
+        </ul>
+      </header>
+
+      <h2 id="experimento" data-toc="O experimento">O experimento: dois pontos, e não um borrão</h2>
+      <p>Em 1922, Otto Stern e Walther Gerlach aqueceram prata num forno, deixaram escapar um feixe fino de átomos e o fizeram passar entre os polos de um ímã com o campo <em>não uniforme</em>: muito mais forte perto de um polo que do outro. Cada átomo de prata se comporta como um pequeno ímã, com um momento magnético $\boldsymbol\mu$, e num campo assim ele sente uma força
+      $$F_z=\mu_z\,\frac{\partial B_z}{\partial z}.$$
+      O desvio vertical do átomo mede, portanto, a componente $\mu_z$ do seu momento magnético.</p>
+      <p>Os átomos saem do forno com orientações ao acaso. Se $\boldsymbol\mu$ fosse uma seta comum de comprimento $\mu$, a componente $\mu_z=\mu\cos\Theta$ poderia valer qualquer coisa entre $-\mu$ e $\mu$, e o anteparo mostraria uma faixa contínua (o exercício 5 calcula que ela seria até uniforme). O que apareceu foram <b>dois pontos</b>: $\mu_z=+\mu$ ou $\mu_z=-\mu$, nada no meio.</p>
+
+      <aside class="box">
+        <p class="tag">O que é estranho de verdade</p>
+        <p>Dois valores, sozinho, não é absurdo: talvez os ímãs atômicos só apontem para cima ou para baixo. O absurdo vem quando se gira o ímã. Com o aparelho deitado, medindo $\mu_x$, de novo dois pontos: $\pm\mu$. Com qualquer outra direção $\mathbf n$, de novo $\mu_{\mathbf n}=\pm\mu$. Nenhuma seta tem projeção $\pm\mu$ em <em>todas</em> as direções — se $\mu_z=\mu_x=\mu$, a projeção na diagonal entre $z$ e $x$ seria $\sqrt2\,\mu$. Então $\boldsymbol\mu$ não é uma seta com três componentes esperando para ser lidas.</p>
+      </aside>
+
+      <h2 id="serie" data-toc="Ímãs em série">Ímãs em série</h2>
+      <p>Chame de <b>ímã $z$</b> o aparelho que separa os átomos pelo valor de $\mu_z$, e imagine que se pode bloquear um dos dois feixes de saída. Três montagens contam a história toda.</p>
+      <ol>
+        <li><b>$z$, depois $z$.</b> Fique só com o feixe $+$ do primeiro ímã e mande-o para um segundo ímã $z$. <em>Todos</em> os átomos saem $+$. A medida é repetível: quem acabou de dar $+$ em $z$ dá $+$ de novo.</li>
+        <li><b>$z$, depois $x$.</b> Mande o feixe $+z$ para um ímã $x$. Metade sai $+x$, metade $-x$. Saber $\mu_z$ não diz nada sobre $\mu_x$.</li>
+        <li><b>$z$, $x$, $z$.</b> Fique com $+z$, depois só com $+x$, e meça $z$ de novo. Seria natural esperar $100\%$ de $+z$: esses átomos foram selecionados como $+z$ lá no começo. Sai <b>metade e metade</b>. Medir $x$ <em>apagou</em> a informação sobre $z$.</li>
+      </ol>
+      <p>A terceira montagem mata a imagem de um átomo que carrega duas etiquetas, uma para $z$ e outra para $x$, e de um ímã que só lê a etiqueta certa. O ímã não lê: ele <b>prepara</b>. O átomo que sai pelo feixe $+x$ está num estado novo, e é desse estado novo que dependem as medidas seguintes.</p>
+
+      <h2 id="amplitudes" data-toc="Amplitudes">Amplitudes: a probabilidade é um quadrado</h2>
+      <p>O modelo que dá conta de tudo isso é pequeno. O estado do spin é um <b>vetor unitário de $\mathbb C^2$</b>. Os dois resultados possíveis do ímã $z$ correspondem a dois vetores ortonormais,
+      $$|{+z}\rangle=\begin{pmatrix}1\\0\end{pmatrix},\qquad|{-z}\rangle=\begin{pmatrix}0\\1\end{pmatrix},$$
+      e a regra para um ímã qualquer é esta: se o estado é $|\psi\rangle$ e o ímã separa nos estados $|{+}\mathbf n\rangle$ e $|{-}\mathbf n\rangle$, então
+      $$P(+\mathbf n)=\big|\langle{+}\mathbf n|\psi\rangle\big|^2,\qquad P(-\mathbf n)=\big|\langle{-}\mathbf n|\psi\rangle\big|^2,$$
+      e o átomo que saiu pelo feixe $+\mathbf n$ <em>está</em>, daí em diante, no estado $|{+}\mathbf n\rangle$. O número $\langle{+}\mathbf n|\psi\rangle$ é a <b>amplitude</b>; a probabilidade é o seu módulo ao quadrado. Como $\{|{+}\mathbf n\rangle,|{-}\mathbf n\rangle\}$ é uma base ortonormal e $|\psi\rangle$ é unitário, as duas probabilidades somam $1$ — é Pitágoras.</p>
+      <p>Para um ímã girado de um ângulo $\theta$ no plano $x$–$z$ (com $\theta=0$ em $z$ e $\theta=90^\circ$ em $x$),
+      $$|{+}\mathbf n\rangle=\begin{pmatrix}\cos\frac\theta2\\[2pt]\sin\frac\theta2\end{pmatrix},\qquad|{-}\mathbf n\rangle=\begin{pmatrix}-\sin\frac\theta2\\[2pt]\cos\frac\theta2\end{pmatrix}.$$
+      Confira as três montagens: $|\langle{+z}|{+z}\rangle|^2=1$; $|\langle{\pm x}|{+z}\rangle|^2=\cos^2 45^\circ=\tfrac12$; e o átomo que saiu $+x$ está em $|{+x}\rangle=\tfrac1{\sqrt2}(1,1)$, que dá $\tfrac12$ para cada lado em $z$, não importa de onde ele veio.</p>
+
+      <aside class="box">
+        <p class="tag">Por que a metade do ângulo</p>
+        <p>$|{+z}\rangle$ e $|{-z}\rangle$ apontam para lados opostos no espaço — $180^\circ$ — mas são <em>ortogonais</em> em $\mathbb C^2$ — $90^\circ$. A fórmula com $\theta/2$ é o que faz essas duas coisas conviverem: girar o ímã de $\theta$ gira o vetor de estado de $\theta/2$. Um efeito colateral curioso: girar o ímã de $360^\circ$ troca $|{+}\mathbf n\rangle$ por $-|{+}\mathbf n\rangle$. Como só $|\text{amplitude}|^2$ se mede, o sinal não aparece numa medida isolada — mas aparece em interferência, e já foi medido com nêutrons.</p>
+      </aside>
+
+      <p>Agora o ponto que separa a mecânica quântica de uma teoria de probabilidades comum. Mande $|{+z}\rangle$ para um ímã $x$, mas <b>não bloqueie nada</b> e não detecte por qual feixe o átomo passou: junte os dois feixes de volta e meça $z$. Qual a chance de sair $-z$? Somando probabilidades de caminhos daria $\tfrac12\cdot\tfrac12+\tfrac12\cdot\tfrac12=\tfrac12$. O que se soma são as <b>amplitudes</b>:
+      $$\langle{-z}|{+x}\rangle\langle{+x}|{+z}\rangle+\langle{-z}|{-x}\rangle\langle{-x}|{+z}\rangle=\tfrac1{\sqrt2}\cdot\tfrac1{\sqrt2}+\big(\tfrac1{\sqrt2}\big)\big(-\tfrac1{\sqrt2}\big)=0.$$
+      Os dois caminhos se cancelam, e nenhum átomo sai $-z$: com os feixes juntados sem olhar, o ímã $x$ é como se não existisse. A soma da esquerda é $\langle{-z}|\big(|{+x}\rangle\langle{+x}|+|{-x}\rangle\langle{-x}|\big)|{+z}\rangle$, e o parêntese é a identidade. É a primeira aparição de uma ferramenta que vai voltar o tempo todo.</p>
+
+      <details>
+        <summary>Probabilidades não se somam; amplitudes, sim — a regra geral</summary>
+        <div class="body">
+          <p>Se um processo pode ir de $|\psi\rangle$ a $|\chi\rangle$ por caminhos que <em>não são distinguidos</em> por nada no aparelho, a amplitude total é a soma das amplitudes dos caminhos e a probabilidade é $|\text{soma}|^2$. Se os caminhos <em>são</em> distinguidos — basta que exista, em princípio, um registro de por onde o átomo passou —, somam-se as probabilidades. A diferença entre as duas contas são os termos cruzados $2\,\mathrm{Re}(\bar a_1a_2)$: é isso que se chama interferência.</p>
+          <p>No experimento acima: se houver um detector em um dos feixes $x$, mesmo que ele não bloqueie o átomo, a chance de $-z$ volta a ser $\tfrac12$. O que destrói a interferência não é o empurrão do detector, é a informação.</p>
+        </div>
+      </details>
+
+      <h2 id="complexos" data-toc="A direção y">A direção $y$ obriga os números complexos</h2>
+      <p>Até aqui só apareceram números reais. Tente agora a terceira direção, $y$. O estado $|{+y}\rangle=(a,b)$ precisa dar meio a meio num ímã $z$ e meio a meio num ímã $x$:
+      $$|a|^2=|b|^2=\tfrac12,\qquad \big|\tfrac{a+b}{\sqrt2}\big|^2=\tfrac12.$$
+      Com $a,b$ reais, as duas primeiras dão $(a,b)=\tfrac1{\sqrt2}(1,\pm1)$ — que são $|{\pm x}\rangle$ e falham a terceira. Não há solução real. Com números complexos há:
+      $$|{\pm y}\rangle=\tfrac1{\sqrt2}\begin{pmatrix}1\\\pm i\end{pmatrix}.$$
+      Três direções, cada uma <em>imparcial</em> em relação às outras duas, é o que força $\mathbb C$. A mecânica quântica com números reais não descreveria um ímã apontado para $y$.</p>
+      <p>O estado mais geral de $\mathbb C^2$, depois de normalizado e descontada a fase global (que nenhuma medida enxerga, porque $|e^{i\alpha}c|^2=|c|^2$), fica com dois parâmetros:
+      $$|\psi\rangle=\cos\tfrac\theta2\,|{+z}\rangle+e^{i\varphi}\sin\tfrac\theta2\,|{-z}\rangle,\qquad 0\le\theta\le\pi,\ 0\le\varphi&lt;2\pi.$$
+      São as coordenadas esféricas de um ponto da esfera unitária, a <b>esfera de Bloch</b>, e esse estado é exatamente $|{+}\mathbf n\rangle$ para $\mathbf n=(\sin\theta\cos\varphi,\sin\theta\sin\varphi,\cos\theta)$. Conclusão de uma linha: <b>todo estado de spin ½ é "para cima" em alguma direção</b>. Não existe estado sem direção preferida — o que o forno produz é outra coisa, uma mistura estatística, assunto da página sobre a matriz densidade.</p>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
+      <p>Um esquema visto de lado. Os átomos saem do forno à esquerda e passam por até três ímãs; em cada um dos dois primeiros, um feixe é barrado (o traço vermelho), e o terceiro manda os dois feixes para detectores. Acima de cada ímã, um mostrador: a linha tracejada é o eixo do ímã no plano $x$–$z$ e a seta violeta é o estado que segue adiante. Cada átomo é sorteado com a regra de Born, ímã por ímã.</p>
+
+      <div class="demo" id="demo-sg">
+        <div class="controls">
+          <label>Montagem
+            <select id="sg-preset" aria-label="Montagem pronta"></select>
+          </label>
+        </div>
+        <div class="controls">
+          <label>ímã 1 <input type="range" id="sg-t1" min="0" max="360" step="5" value="0" aria-label="Ângulo do ímã 1"><output id="sg-t1v">0°</output></label>
+          <label><select id="sg-s1" aria-label="Feixe que passa no ímã 1"><option value="1">passa +</option><option value="-1">passa −</option></select></label>
+        </div>
+        <div class="controls">
+          <label class="check"><input type="checkbox" id="sg-usa2" checked> ímã 2</label>
+          <label><input type="range" id="sg-t2" min="0" max="360" step="5" value="90" aria-label="Ângulo do ímã 2"><output id="sg-t2v">90°</output></label>
+          <label><select id="sg-s2" aria-label="Feixe que passa no ímã 2"><option value="1">passa +</option><option value="-1">passa −</option></select></label>
+        </div>
+        <div class="controls">
+          <label>ímã 3 <input type="range" id="sg-t3" min="0" max="360" step="5" value="0" aria-label="Ângulo do ímã 3"><output id="sg-t3v">0°</output></label>
+          <button id="sg-cem" type="button">Soltar 100 átomos</button>
+          <button id="sg-play" type="button">▶ Contínuo</button>
+          <button id="sg-zera" type="button">Zerar</button>
+        </div>
+        <div class="panels">
+          <canvas id="sg-canvas" class="alto" role="img" aria-label="Esquema do forno, dos três ímãs e dos detectores, com os átomos em voo"></canvas>
+        </div>
+        <div class="readout" id="sg-readout" aria-live="polite"></div>
+      </div>
+
+      <p>Para tentar:</p>
+      <ol>
+        <li>Comece pela montagem <b>z, x, z</b>, solte átomos e confira o meio a meio no fim. Depois desmarque o <b>ímã 2</b>: o mesmo feixe $+z$ agora dá $+$ sempre.</li>
+        <li>Em <b>z, depois um ângulo de 60°</b>, a teoria diz $\cos^2 30^\circ=75\%$. Mova o ímã 3 e acompanhe $\cos^2(\theta/2)$: $100\%$ em $0^\circ$, $50\%$ em $90^\circ$, $0\%$ em $180^\circ$ — e de novo $100\%$ em $360^\circ$, apesar do sinal trocado no vetor de estado.</li>
+        <li>Compare <b>z, depois x</b> (meio a meio) com <b>z, 45°, 90°</b>: pondo um ímã intermediário, <em>mais</em> átomos chegam ao $+x$ do fim do que sem ele, entre os que passam. Girar o estado aos poucos custa menos que girá-lo de uma vez. O exercício 3 leva isso ao limite.</li>
+        <li>Ponha o ímã 1 em $0^\circ$ deixando passar $-$, e o ímã 3 em $180^\circ$: todos dão $+$. "Para baixo em $z$" e "para cima em $-z$" são o mesmo estado.</li>
+      </ol>
+
+      <h2 id="qubit" data-toc="O qubit">O qubit</h2>
+      <p>Nada acima usou que se trata de prata, nem de magnetismo. Qualquer sistema em que uma medida tem dois resultados possíveis, e em que existem medidas "giradas" umas em relação às outras, é descrito pelo mesmo $\mathbb C^2$: a polarização de um fóton (com polarizadores no lugar dos ímãs), dois níveis de energia de um átomo, a carga num circuito supercondutor. O nome genérico é <b>qubit</b>, e a esfera de Bloch é o espaço de todos os seus estados puros.</p>
+      <p>A regra de probabilidade, escrita na esfera, fica geométrica. Se $\mathbf n$ e $\mathbf m$ são as direções de dois estados,
+      $$\big|\langle{+}\mathbf m|{+}\mathbf n\rangle\big|^2=\frac{1+\mathbf m\cdot\mathbf n}{2}=\cos^2\frac\gamma2,$$
+      com $\gamma$ o ângulo entre eles. Estados ortogonais em $\mathbb C^2$ são pontos <em>antípodas</em> da esfera. As próximas páginas transformam essas regras em postulados (<a href="observaveis.html">observáveis e medição</a>), dão a elas uma notação (<a href="dirac.html">Dirac</a>) e põem o spin para girar (<a href="evolucao-spin.html">evolução no tempo</a>).</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. A probabilidade na esfera</p>
+        <p>Mostre que $|\langle{+}\mathbf m|{+}\mathbf n\rangle|^2=\tfrac12(1+\mathbf m\cdot\mathbf n)$. Faça primeiro o caso em que as duas direções estão no plano $x$–$z$, e depois o caso geral. <b>Dica:</b> no caso geral, gire os eixos para pôr $\mathbf n$ em $z$; ou calcule direto com as coordenadas esféricas.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>No plano $x$–$z$, com ângulos $\alpha$ e $\beta$: $\langle{+}\mathbf m|{+}\mathbf n\rangle=\cos\frac\alpha2\cos\frac\beta2+\sin\frac\alpha2\sin\frac\beta2=\cos\frac{\alpha-\beta}2$, e $\cos^2\frac{\gamma}2=\frac{1+\cos\gamma}2$ com $\gamma=\alpha-\beta$, que é o ângulo entre as direções.</p>
+          <p>No caso geral, com $|{+}\mathbf n\rangle=(c_1,s_1e^{i\varphi_1})$ e $|{+}\mathbf m\rangle=(c_2,s_2e^{i\varphi_2})$, onde $c_j=\cos\frac{\theta_j}2$ e $s_j=\sin\frac{\theta_j}2$:
+          $$|\langle{+}\mathbf m|{+}\mathbf n\rangle|^2=|c_1c_2+s_1s_2e^{i(\varphi_1-\varphi_2)}|^2=c_1^2c_2^2+s_1^2s_2^2+2c_1c_2s_1s_2\cos(\varphi_1-\varphi_2).$$
+          Usando $c^2=\frac{1+\cos\theta}2$, $s^2=\frac{1-\cos\theta}2$ e $2cs=\sin\theta$, a soma vira $\tfrac12\big(1+\cos\theta_1\cos\theta_2+\sin\theta_1\sin\theta_2\cos(\varphi_1-\varphi_2)\big)=\tfrac12(1+\mathbf m\cdot\mathbf n)$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Olhar ou não olhar</p>
+        <p>Um feixe $|{+z}\rangle$ passa por um ímã no ângulo $\theta$ e depois por um ímã $z$. Calcule a fração que sai $+z$ no fim em três versões do ímã do meio: (a) ele barra o feixe $-$; (b) não barra nada, mas há um detector que registra por qual feixe cada átomo passou; (c) não barra nada e não registra nada, e os feixes são juntados de volta. Para que ângulo (a) e (b) mais diferem de (c)?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $c=\cos\frac\theta2$ e $s=\sin\frac\theta2$: (a) passa a fração $c^2$, e dessas sai $+z$ a fração $c^2$: total $c^4$. (b) Os dois caminhos são distinguíveis, então somam-se probabilidades: $c^2\cdot c^2+s^2\cdot s^2=c^4+s^4$. (c) Somam-se amplitudes: $c\cdot c+s\cdot s=1$, e a chance é $1$ — o ímã do meio, sem registro, não faz nada.</p>
+          <p>Em $\theta=90^\circ$: (a) dá $\tfrac14$, (b) dá $\tfrac12$, (c) dá $1$. Os termos cruzados que (b) perde valem $2c^2s^2=\tfrac12\sin^2\theta$, máximos em $90^\circ$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Girar aos poucos</p>
+        <p>Um feixe $|{+z}\rangle$ passa por $N$ ímãs nos ângulos $\frac{90^\circ}{N},\frac{2\cdot90^\circ}{N},\dots,90^\circ$, e em cada um só passa o feixe $+$. (a) Que fração chega ao fim? (b) Calcule para $N=1,2,10$. (c) O que acontece quando $N\to\infty$? (d) E se o último ímã estiver em $180^\circ$: dá para levar $+z$ a $-z$ sem perder quase nada?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Cada passo gira o ímã de $\frac{90^\circ}N$ e deixa passar a fração $\cos^2\frac{45^\circ}{N}$, então chega $\big(\cos^2\frac{\pi}{4N}\big)^N$.</p>
+          <p>(b) $N=1$: $0{,}5$. $N=2$: $\cos^4 22{,}5^\circ\approx0{,}729$ (a montagem "z, 45°, 90°" da demo). $N=10$: $\approx0{,}940$.</p>
+          <p>(c) $\ln\big(\cos^{2N}\frac\pi{4N}\big)\approx 2N\cdot\big(-\tfrac12\tfrac{\pi^2}{16N^2}\big)=-\frac{\pi^2}{16N}\to0$, então a fração tende a $1$. (d) Sim, com o mesmo argumento: fração $\big(\cos^2\frac\pi{2N}\big)^N\to1$. Cada ímã só faz uma pergunta "quase igual" à anterior, e a resposta quase sempre é sim — mas a soma das pequenas perguntas leva o estado a ser o oposto do inicial. Medidas frequentes que <em>congelam</em> o estado são o efeito Zeno quântico; aqui elas o <em>arrastam</em>.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. O estado $+y$</p>
+        <p>(a) Confira que $|{+y}\rangle=\frac1{\sqrt2}(1,i)$ dá meio a meio nos ímãs $z$ e $x$. (b) Ache $|{-y}\rangle$. (c) O vetor $\frac1{\sqrt2}(1,-i)$ também dá meio a meio em $z$ e em $x$. Por que, então, a escolha de $+i$ para $+y$ não é arbitrária — ou é?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $|\langle{\pm z}|{+y}\rangle|^2=\tfrac12$ imediatamente; $\langle{\pm x}|{+y}\rangle=\tfrac12(1\pm i)$, de módulo ao quadrado $\tfrac12$.</p>
+          <p>(b) O vetor unitário ortogonal a $(1,i)/\sqrt2$, a menos de fase, é $(1,-i)/\sqrt2$. Então $|{-y}\rangle=\frac1{\sqrt2}(1,-i)$.</p>
+          <p>(c) $(1,i)$ e $(1,-i)$ são os dois candidatos, e cada um é o "menos" do outro. Decidir qual deles é $+y$ equivale a escolher a orientação do espaço — se $(x,y,z)$ é um triedro de mão direita ou esquerda. Uma vez fixada essa convenção (e a que fixamos aqui é a usual: com ela, $\mathbf n=(\sin\theta\cos\varphi,\sin\theta\sin\varphi,\cos\theta)$ na fórmula da esfera de Bloch), não sobra liberdade. A escolha aparece de novo quando o spin gira num campo magnético: o sentido de rotação tem que sair certo.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. O borrão clássico</p>
+        <p>Suponha que $\boldsymbol\mu$ fosse uma seta de comprimento $\mu$ com direção uniformemente distribuída na esfera. Mostre que $\mu_z$ seria uniformemente distribuído em $[-\mu,\mu]$. Como seria então a figura no anteparo?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Direção uniforme na esfera significa densidade proporcional à área: a faixa entre as colatitudes $\Theta$ e $\Theta+d\Theta$ tem área $2\pi\sin\Theta\,d\Theta$, de um total de $4\pi$. Com $u=\cos\Theta$, $du=-\sin\Theta\,d\Theta$, e a densidade de $u$ é $\frac{2\pi}{4\pi}=\frac12$ em $[-1,1]$: uniforme. (É o teorema de Arquimedes: a área de uma faixa da esfera só depende da altura da faixa.) Logo $\mu_z=\mu u$ seria uniforme em $[-\mu,\mu]$ e o anteparo mostraria uma faixa vertical de intensidade constante, em vez de dois pontos.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li class="soon">Nada: esta é uma porta de entrada.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="observaveis.html">Observáveis e medição</a></li>
+            <li><a href="dirac.html">Notação de Dirac e bases contínuas</a></li>
+            <li><a href="evolucao-spin.html">Evolução no tempo: precessão e Rabi</a></li>
+            <li><a href="emaranhamento.html">Emaranhamento e Bell</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/sg-core.js"></script>
+  <script src="../assets/sg-demo.js"></script>
+</body>
+</html>

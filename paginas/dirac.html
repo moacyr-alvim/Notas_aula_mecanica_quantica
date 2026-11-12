@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notação de Dirac e bases contínuas — Mecânica quântica</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Notação de Dirac e bases contínuas</h1>
+        <p class="lede">A álgebra linear que você já sabe, escrita do jeito dos físicos — e, depois, a parte que é nova de verdade: a base $|x\rangle$ que não está no espaço, a normalização com delta, e a função de onda como um produto interno.</p>
+        <p class="meta">Pressupõe álgebra linear com produto interno complexo. Ajuda ter visto <a href="stern-gerlach.html">Stern–Gerlach</a>. Leitura de uns 30 minutos, mais a célula de Python.</p>
+        <ul class="livros">
+          <li><b>Shankar</b>, cap. 1 (§1.10 em diante, para as bases contínuas): o tratamento mais cuidadoso dos três.</li>
+          <li><b>Griffiths</b>, §3.6. <b>Freericks</b>, cap. 5 ("Mathematical interlude"), que usa a notação sem escolher base nenhuma.</li>
+        </ul>
+      </header>
+
+      <h2 id="dicionario" data-toc="O dicionário">O dicionário</h2>
+      <p>Nada nesta seção é matemática nova; é só a tradução. O espaço de estados é um espaço vetorial complexo $\mathcal H$ com produto interno. Um vetor de $\mathcal H$ se escreve $|\psi\rangle$ e se chama <b>ket</b>; o rótulo dentro dele é um nome, não uma lista de componentes — $|{+z}\rangle$, $|n\rangle$ e $|\text{morto}\rangle$ são todos kets.</p>
+
+      <table class="tabela">
+        <thead><tr><th>Física</th><th>Álgebra linear</th><th>Em $\mathbb C^n$</th></tr></thead>
+        <tbody>
+          <tr><td>$|\psi\rangle$</td><td>vetor de $\mathcal H$</td><td>coluna $\psi$</td></tr>
+          <tr><td>$\langle\varphi|$</td><td>o funcional $v\mapsto(\varphi,v)$, elemento do dual</td><td>linha $\varphi^\dagger=\bar\varphi^{\top}$</td></tr>
+          <tr><td>$\langle\varphi|\psi\rangle$</td><td>produto interno $(\varphi,\psi)$</td><td>$\sum_k\bar\varphi_k\psi_k$</td></tr>
+          <tr><td>$\langle\varphi|A|\psi\rangle$</td><td>$(\varphi,A\psi)$</td><td>$\varphi^\dagger A\psi$</td></tr>
+          <tr><td>$|\psi\rangle\langle\varphi|$</td><td>operador de posto um $v\mapsto(\varphi,v)\,\psi$</td><td>$\psi\varphi^\dagger$</td></tr>
+          <tr><td>$A^\dagger$</td><td>adjunto: $(\varphi,A\psi)=(A^\dagger\varphi,\psi)$</td><td>$\bar A^{\top}$</td></tr>
+        </tbody>
+      </table>
+
+      <aside class="box atencao">
+        <p class="tag">A convenção que pega o matemático</p>
+        <p>Em física, o produto interno é <b>linear na segunda entrada</b> e antilinear na primeira: $\langle\varphi|c\psi\rangle=c\langle\varphi|\psi\rangle$ e $\langle c\varphi|\psi\rangle=\bar c\langle\varphi|\psi\rangle$. Muitos livros de matemática fazem o contrário. A notação de Dirac praticamente obriga a escolha física: o bra $\langle\varphi|$ é uma coisa linear que come o ket à sua direita.</p>
+      </aside>
+
+      <p>O que a notação ganha, e o motivo de ela ter vencido, é uma regra só: <b>a resolução da identidade</b>. Se $\{|n\rangle\}$ é base ortonormal,
+      $$\sum_n|n\rangle\langle n|=I.$$
+      Encaixe esse $I$ onde quiser. Entre um bra e um ket, sai a expressão do produto interno em coordenadas,
+      $\langle\varphi|\psi\rangle=\sum_n\langle\varphi|n\rangle\langle n|\psi\rangle=\sum_n\overline{\varphi_n}\,\psi_n$; entre dois operadores, sai o produto de matrizes,
+      $\langle m|AB|k\rangle=\sum_n\langle m|A|n\rangle\langle n|B|k\rangle$; e entre duas bases diferentes, sai a mudança de base, $\langle e'_m|\psi\rangle=\sum_n\langle e'_m|e_n\rangle\langle e_n|\psi\rangle$, com matriz unitária $U_{mn}=\langle e'_m|e_n\rangle$. Em <a href="stern-gerlach.html#amplitudes">Stern–Gerlach</a>, foi esse mesmo $I=|{+x}\rangle\langle{+x}|+|{-x}\rangle\langle{-x}|$ que fez dois caminhos se cancelarem.</p>
+      <p>O teorema espectral também fica curto: um operador hermitiano ($A^\dagger=A$) se escreve
+      $$A=\sum_n a_n\,|n\rangle\langle n|,\qquad a_n\in\mathbb R,$$
+      com $\{|n\rangle\}$ base ortonormal de autovetores; e qualquer função dele é $f(A)=\sum_nf(a_n)|n\rangle\langle n|$. É assim que vão aparecer $e^{-iHt/\hbar}$, $\sqrt{A}$ e companhia.</p>
+
+      <h2 id="infinito" data-toc="A base |x⟩">A base $|x\rangle$, que não mora no espaço</h2>
+      <p>Para uma partícula na reta, o espaço é $\mathcal H=L^2(\mathbb R)$, e o observável mais natural é a posição $X$: $(X\psi)(x)=x\,\psi(x)$. Em dimensão finita, um operador hermitiano tem uma base de autovetores. O que seriam os autovetores de $X$? Um $\psi$ com $x\,\psi(x)=x_0\,\psi(x)$ para todo $x$ precisa ser zero fora de $x_0$ — e em $L^2$ isso é o vetor nulo. <b>$X$ não tem autovetor nenhum.</b></p>
+      <p>A física não se intimida e escreve assim mesmo um $|x_0\rangle$ com $X|x_0\rangle=x_0|x_0\rangle$, imitando todas as regras da dimensão finita com a soma trocada por integral:
+      $$\langle x|x'\rangle=\delta(x-x'),\qquad\int_{-\infty}^{\infty}|x\rangle\langle x|\,dx=I.$$
+      A primeira fórmula diz que $|x\rangle$ tem "norma infinita" — por isso não está em $\mathcal H$. A segunda é a resolução da identidade, e com ela tudo o mais se deduz. As componentes de um estado nessa base são uma <em>função</em>,
+      $$\psi(x)=\langle x|\psi\rangle,$$
+      e essa é a <b>função de onda</b>. O produto interno vira a integral de sempre, inserindo a identidade:
+      $$\langle\varphi|\psi\rangle=\int\langle\varphi|x\rangle\langle x|\psi\rangle\,dx=\int\overline{\varphi(x)}\,\psi(x)\,dx,$$
+      e $\langle\psi|\psi\rangle=\int|\psi(x)|^2dx=1$ é a afirmação de que a partícula está em algum lugar. A <a href="funcao-de-onda.html">página da função de onda</a> parte daqui.</p>
+
+      <details>
+        <summary>O que é $|x\rangle$, de verdade</summary>
+        <div class="body">
+          <p>O bra $\langle x|$ é perfeitamente honesto: é o funcional "avaliar em $x$", $\psi\mapsto\psi(x)$. Ele não é contínuo em $L^2$ (funções de norma pequena podem ter valores enormes num ponto), mas é contínuo num espaço menor de funções bem-comportadas $\Phi\subset L^2$, por exemplo as de Schwartz. O ket $|x\rangle$ mora então no dual $\Phi'$ — é a distribuição $\delta_x$. O tripé $\Phi\subset L^2\subset\Phi'$ se chama <b>espaço de Hilbert equipado</b> (<em>rigged Hilbert space</em>), e é o que justifica todas as contas desta página.</p>
+          <p>A regra prática que sai disso: expressões com $|x\rangle$ e $|p\rangle$ são confiáveis quando, no fim, elas aparecem integradas contra funções suaves. $\langle x|\psi\rangle$ com $\psi$ suave, sim; $\langle x|x\rangle$, não.</p>
+        </div>
+      </details>
+
+      <h2 id="momento" data-toc="A base |p⟩">A base $|p\rangle$ e a transformada de Fourier</h2>
+      <p>O momento é o gerador das translações. Sem entrar nisso agora (fica para a página de simetrias), a definição operacional é: os autoestados de momento, na base de posição, são ondas planas,
+      $$\langle x|p\rangle=\frac{1}{\sqrt{2\pi\hbar}}\,e^{ipx/\hbar},\qquad p\in\mathbb R.$$
+      O fator na frente foi escolhido para que $|p\rangle$ seja normalizado do mesmo jeito que $|x\rangle$:
+      $$\langle p|p'\rangle=\int\langle p|x\rangle\langle x|p'\rangle\,dx=\frac1{2\pi\hbar}\int e^{i(p'-p)x/\hbar}\,dx=\delta(p-p').$$
+      A função de onda <em>no espaço de momentos</em> é a componente na outra base,
+      $$\varphi(p)=\langle p|\psi\rangle=\int\langle p|x\rangle\langle x|\psi\rangle\,dx=\frac1{\sqrt{2\pi\hbar}}\int e^{-ipx/\hbar}\,\psi(x)\,dx,$$
+      que é a <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/transformada-fourier.html">transformada de Fourier</a>, na normalização unitária. O teorema de Plancherel, $\int|\psi|^2dx=\int|\varphi|^2dp$, é só a afirmação de que mudar de base ortonormal não muda a norma.</p>
+
+      <p>E o operador $P$ na base de posição? Insira a identidade na base de momentos, onde $P$ é diagonal:
+      $$\langle x|P|\psi\rangle=\int\langle x|p\rangle\,p\,\langle p|\psi\rangle\,dp=-i\hbar\frac{d}{dx}\int\langle x|p\rangle\langle p|\psi\rangle\,dp=-i\hbar\,\psi'(x).$$
+      Derivar $\langle x|p\rangle$ em $x$ puxa o fator $ip/\hbar$, e é só isso. Na mesma base, $X$ é multiplicar por $x$; e o comutador sai em uma linha:
+      $$[X,P]\psi=x\,(-i\hbar\psi')-(-i\hbar)(x\psi)'=i\hbar\,\psi\qquad\Longrightarrow\qquad[X,P]=i\hbar.$$</p>
+
+      <aside class="box atencao">
+        <p class="tag">$[X,P]=i\hbar$ não cabe em matriz nenhuma</p>
+        <p>Se $X$ e $P$ fossem matrizes $n\times n$, o traço de $XP-PX$ seria $\operatorname{tr}(XP)-\operatorname{tr}(PX)=0$, e o de $i\hbar I$ é $i\hbar n$. Não existe par de matrizes com esse comutador, em dimensão nenhuma. Isso não é um detalhe técnico: é por isso que a posição e o momento <em>precisam</em> de dimensão infinita e de operadores ilimitados, enquanto o spin vive feliz em $\mathbb C^2$. Na célula de Python abaixo dá para ver o que uma grade finita faz no lugar.</p>
+      </aside>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo: a reta numa grade</h2>
+      <p>Troque a reta por $N$ pontos $x_j$ com espaçamento $\Delta x$, e a base contínua $|x\rangle$ pelos vetores da base canônica, com $\langle x_j|\psi\rangle=\sqrt{\Delta x}\,\psi(x_j)$ — o $\sqrt{\Delta x}$ faz a soma dos quadrados aproximar a integral. Complete duas coisas: a matriz de derivada (diferença central) que dá $P=-i\hbar D$, e a matriz de entradas $\langle p|x_j\rangle$, que leva o estado para a base de momentos inserindo uma identidade. O código então confere que as duas bases dão o mesmo $\langle p\rangle$, e testa o comutador.</p>
+      <div class="pycell" data-title="X, P e o comutador numa grade"
+           data-starter="../py/dirac_lacunas.py"
+           data-solution="../py/dirac_solucao.py"></div>
+      <p>Três coisas para notar na saída. O $\langle p\rangle$ calculado pela matriz $P$ sai um pouco menor que $2$: a diferença central aplicada a $e^{ipx}$ devolve $\sin(p\,\Delta x)/\Delta x$ em vez de $p$. O comutador $[X,P]$ aplicado ao pacote suave dá quase exatamente $i\hbar\psi$. E aplicado ao vetor que mais oscila na grade, ele dá $-i\hbar$ vezes o vetor — o erro tem norma $2$. Os autovalores de $[X,P]/(i\hbar)$ se espalham entre $-1$ e $1$ e somam zero, como o traço exige: a grade "paga" o $+1$ dos vetores suaves com o $-1$ dos que oscilam. O exercício 4 explica a forma exata.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Projetores</p>
+        <p>Seja $|e\rangle$ unitário e $\Pi=|e\rangle\langle e|$. Mostre que $\Pi^2=\Pi$, $\Pi^\dagger=\Pi$ e que $\langle\psi|\Pi|\psi\rangle=|\langle e|\psi\rangle|^2$. Interprete o último número em Stern–Gerlach. Que operador é $|{+z}\rangle\langle{+z}|-|{-z}\rangle\langle{-z}|$, como matriz?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\Pi^2=|e\rangle\langle e|e\rangle\langle e|=|e\rangle\langle e|$ porque $\langle e|e\rangle=1$. O adjunto de $|a\rangle\langle b|$ é $|b\rangle\langle a|$, logo $\Pi^\dagger=\Pi$. E $\langle\psi|e\rangle\langle e|\psi\rangle=\overline{\langle e|\psi\rangle}\langle e|\psi\rangle$.</p>
+          <p>Com $|e\rangle=|{+}\mathbf n\rangle$, o número é a probabilidade de o átomo passar pelo feixe $+\mathbf n$: um projetor é a "pergunta de sim ou não", e seu valor esperado é a chance do sim. A diferença dos dois projetores é $\mathrm{diag}(1,-1)=\sigma_z$, o observável que dá $+1$ num feixe e $-1$ no outro — o assunto da <a href="observaveis.html">próxima página</a>.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. P é hermitiano</p>
+        <p>Mostre que $\langle\varphi|P\psi\rangle=\langle P\varphi|\psi\rangle$ para $\varphi,\psi$ suaves que vão a zero no infinito. Onde a conta usa o $i$? O que daria errado com $D=d/dx$ sem o $-i\hbar$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\langle\varphi|P\psi\rangle=\int\bar\varphi\,(-i\hbar\psi')\,dx=\big[-i\hbar\bar\varphi\psi\big]_{-\infty}^{\infty}+i\hbar\int\bar\varphi'\psi\,dx=\int\overline{(-i\hbar\varphi')}\,\psi\,dx=\langle P\varphi|\psi\rangle.$ O termo de fronteira some pelo decaimento, e o passo $i\hbar\,\bar\varphi'=\overline{-i\hbar\varphi'}$ é onde o $i$ trabalha: o conjugado de $-i$ é $i$.</p>
+          <p>Sem o $i$, a integração por partes dá $\langle\varphi|D\psi\rangle=-\langle D\varphi|\psi\rangle$: $D$ é <b>anti</b>-hermitiano, com autovalores imaginários puros ($e^{ikx}$ tem autovalor $ik$). Multiplicar por $-i$ é o que transforma isso em um observável de autovalores reais — o mesmo que acontece na grade da célula: a matriz $D$ é antissimétrica e $-iD$ é hermitiana.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. $X$ na base de momentos</p>
+        <p>Mostre que $\langle p|X|\psi\rangle=i\hbar\,\dfrac{d}{dp}\varphi(p)$. Use isso para conferir $[X,P]=i\hbar$ na base de momentos.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\langle p|X|\psi\rangle=\int\langle p|x\rangle\,x\,\psi(x)\,dx$, e $x\,\langle p|x\rangle=x\,\frac{e^{-ipx/\hbar}}{\sqrt{2\pi\hbar}}=i\hbar\frac{\partial}{\partial p}\langle p|x\rangle$. Tirando a derivada da integral, $\langle p|X|\psi\rangle=i\hbar\,\varphi'(p)$.</p>
+          <p>Então, na base $|p\rangle$, $X=i\hbar\,d/dp$ e $P$ é multiplicar por $p$: $[X,P]\varphi=i\hbar(p\varphi)'-p\,i\hbar\varphi'=i\hbar\varphi$. As duas bases são espelhos uma da outra, a menos de um sinal.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. O comutador na grade</p>
+        <p>Na grade da célula, com $X=\mathrm{diag}(x_j)$ e $P=-i\hbar D$, $D$ a diferença central: (a) mostre que $[X,P]=\frac{i\hbar}{2}(S+S^\top)$, onde $S$ é o deslocamento $(S\psi)_j=\psi_{j+1}$ (com $\psi=0$ fora da grade); (b) mostre que os autovalores de $\frac12(S+S^\top)$ são $\cos\frac{k\pi}{N+1}$, $k=1,\dots,N$. Por que isso explica tudo o que a célula imprimiu?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) A entrada $(j,k)$ de $XP-PX$ é $(x_j-x_k)P_{jk}$. Só $k=j\pm1$ sobrevivem: $P_{j,j+1}=-\frac{i\hbar}{2\Delta x}$ com $x_j-x_{j+1}=-\Delta x$, e $P_{j,j-1}=\frac{i\hbar}{2\Delta x}$ com $x_j-x_{j-1}=\Delta x$. As duas dão $\frac{i\hbar}2$. Logo $[X,P]\psi$ tem componente $j$ igual a $i\hbar\,\frac{\psi_{j+1}+\psi_{j-1}}2$: uma <em>média dos vizinhos</em>, não o próprio $\psi_j$.</p>
+          <p>(b) A matriz $\frac12(S+S^\top)$ é tridiagonal com $\frac12$ fora da diagonal; os vetores $v_j=\sin\frac{jk\pi}{N+1}$ são autovetores, porque $\frac12(\sin(j-1)\alpha+\sin(j+1)\alpha)=\cos\alpha\sin j\alpha$ e as pontas se anulam sozinhas. (É a mesma conta dos modos de uma corda de pontas presas, discretizada.)</p>
+          <p>Num vetor suave, vizinhos são quase iguais e a média é o próprio valor: autovalor perto de $1$, e $[X,P]\approx i\hbar$. No vetor alternado, a média dos vizinhos é <em>menos</em> o valor: autovalor perto de $-1$. A soma dos cossenos é zero, como o traço exige. A grade reproduz a relação canônica exatamente onde a física acontece — nos estados que variam devagar na escala de $\Delta x$ — e paga a conta nos que não variam.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="stern-gerlach.html">Stern–Gerlach e o qubit</a></li>
+            <li><a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/transformada-fourier.html">A transformada de Fourier na reta</a> (livro de EDP)</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="observaveis.html">Observáveis e medição</a></li>
+            <li><a href="funcao-de-onda.html">A função de onda e a equação de Schrödinger</a></li>
+            <li><a href="incerteza.html">Comutadores e incerteza</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

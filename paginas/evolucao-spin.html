@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Evolução no tempo: precessão e Rabi — Mecânica quântica</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Evolução no tempo: precessão e Rabi</h1>
+        <p class="lede">Com o hamiltoniano constante, resolver a equação de Schrödinger é diagonalizar uma matriz e pendurar uma fase em cada autovetor. No spin, essas fases viram uma rotação da esfera de Bloch — e um campo girando na frequência certa vira o spin de cabeça para baixo.</p>
+        <p class="meta">Usa <a href="observaveis.html">observáveis e medição</a> e a esfera de Bloch de <a href="stern-gerlach.html#complexos">Stern–Gerlach</a>. Leitura de uns 35 minutos, com a demo e a célula de Python.</p>
+        <ul class="livros">
+          <li><b>Freericks</b>, cap. 14 (evolução no tempo, sem escolher representação). <b>Shankar</b>, §4.3 e cap. 14 (ressonância magnética).</li>
+          <li><b>Griffiths</b>, §2.1 (estados estacionários) e, no §4.4, o exemplo da precessão de Larmor; a ressonância está no cap. 11.</li>
+        </ul>
+      </header>
+
+      <h2 id="schrodinger" data-toc="A equação">A equação, quando $H$ não depende do tempo</h2>
+      <p>O quarto postulado diz que, entre medidas,
+      $$i\hbar\,\frac{d}{dt}|\psi(t)\rangle=H\,|\psi(t)\rangle,$$
+      com $H$ o observável energia, o <b>hamiltoniano</b>. Se $H$ não depende de $t$, a solução é uma exponencial,
+      $$|\psi(t)\rangle=U(t)\,|\psi(0)\rangle,\qquad U(t)=e^{-iHt/\hbar},$$
+      e o teorema espectral diz como calculá-la: se $H|n\rangle=E_n|n\rangle$, então
+      $$|\psi(t)\rangle=\sum_n e^{-iE_nt/\hbar}\,c_n\,|n\rangle,\qquad c_n=\langle n|\psi(0)\rangle.$$
+      É a receita do <a href="https://moacyr-alvim.github.io/notas_aula_edp/paginas/poco-infinito.html">poço infinito do livro de EDP</a> e do calor no círculo: projete na base de autovetores, resolva cada coordenada (aqui, uma fase), remonte. A diferença com o calor é que o fator $e^{-iE_nt/\hbar}$ tem módulo $1$.</p>
+      <p>Duas consequências imediatas. Como $H$ é hermitiano, $U(t)$ é <b>unitário</b> ($U^\dagger U=I$), e a norma se conserva: a probabilidade total não vaza. E se o estado inicial é um autovetor, $|\psi(t)\rangle=e^{-iE_nt/\hbar}|n\rangle$ só ganha uma fase global, invisível para qualquer medida: é um <b>estado estacionário</b>. Tudo o que se mexe no mundo quântico se mexe por <em>diferença</em> de fase entre autovetores de energias distintas.</p>
+
+      <h2 id="heisenberg" data-toc="Retrato de Heisenberg">O retrato de Heisenberg</h2>
+      <p>O que se mede são médias, e $\langle A\rangle_t=\langle\psi(0)|U^\dagger AU|\psi(0)\rangle$. Dá para pôr o tempo no estado (retrato de Schrödinger) ou no operador, definindo
+      $$A_H(t)=U(t)^\dagger A\,U(t),\qquad\frac{dA_H}{dt}=\frac{i}{\hbar}[H,A_H].$$
+      Tomando a média num estado fixo:
+      $$\frac{d}{dt}\langle A\rangle=\frac{i}{\hbar}\big\langle[H,A]\big\rangle.$$
+      É a regra de ouro da dinâmica quântica, e ela tem a cara do colchete de Poisson clássico, $\dot f=\{f,H\}$, com $\{\cdot,\cdot\}\leftrightarrow\frac1{i\hbar}[\cdot,\cdot]$. Em particular, <b>$A$ se conserva se e só se comuta com $H$</b> — para todo estado. O Freericks constrói boa parte do livro nesse retrato, porque ele dispensa escolher uma base.</p>
+
+      <h2 id="larmor" data-toc="Precessão de Larmor">O spin num campo magnético: precessão</h2>
+      <p>Um momento magnético $\boldsymbol\mu=\gamma\mathbf S$ num campo $\mathbf B$ tem energia $-\boldsymbol\mu\cdot\mathbf B$, então $H=-\gamma\,\mathbf B\cdot\mathbf S$. Para um campo constante na direção $z$, com $\omega_0=-\gamma B_0$,
+      $$H=\frac{\hbar\omega_0}{2}\,\sigma_z,\qquad E_\pm=\pm\frac{\hbar\omega_0}{2}.$$
+      Comece em $|{+}\mathbf n\rangle=\cos\frac\theta2|{+z}\rangle+e^{i\varphi}\sin\frac\theta2|{-z}\rangle$. Pela receita,
+      $$|\psi(t)\rangle=e^{-i\omega_0t/2}\cos\tfrac\theta2|{+z}\rangle+e^{i\omega_0t/2}e^{i\varphi}\sin\tfrac\theta2|{-z}\rangle\ \simeq\ \cos\tfrac\theta2|{+z}\rangle+e^{i(\varphi+\omega_0t)}\sin\tfrac\theta2|{-z}\rangle,$$
+      descontada a fase global. O ângulo $\theta$ fica parado e o azimute anda: $\varphi(t)=\varphi+\omega_0t$. <b>O vetor de Bloch gira em torno do campo com a frequência de Larmor $\omega_0$</b>, exatamente como um pião magnético clássico.</p>
+      <p>Isso vale para qualquer direção do campo, e o retrato de Heisenberg mostra por quê. Um hamiltoniano de spin ½ qualquer, sem traço, é $H=\frac\hbar2\,\boldsymbol\omega\cdot\boldsymbol\sigma$ para algum vetor $\boldsymbol\omega$, e com $[\sigma_j,\sigma_k]=2i\varepsilon_{jkl}\sigma_l$:
+      $$\frac{d}{dt}\langle\boldsymbol\sigma\rangle=\boldsymbol\omega\times\langle\boldsymbol\sigma\rangle.$$
+      Toda evolução de um qubit é uma <b>rotação da esfera de Bloch</b>, em torno do eixo $\boldsymbol\omega$, com velocidade angular $|\boldsymbol\omega|$.</p>
+
+      <aside class="box">
+        <p class="tag">Uma volta não é uma volta</p>
+        <p>Depois de uma volta completa, $t=2\pi/\omega_0$, o vetor de Bloch voltou ao lugar. O vetor de estado, não: $e^{-i\pi\sigma_z}=-I$. Uma rotação de $360^\circ$ multiplica o spinor por $-1$, como já se tinha visto girando o ímã em <a href="stern-gerlach.html#amplitudes">Stern–Gerlach</a>. Numa medida isolada isso não aparece; num interferômetro em que só metade do feixe passa pelo campo, aparece — e foi medido com nêutrons em 1975. São precisos $720^\circ$ para o spinor voltar.</p>
+      </aside>
+
+      <h2 id="rabi" data-toc="Ressonância de Rabi">Um campo girante: a ressonância de Rabi</h2>
+      <p>Agora, além de $B_0\hat z$, um campo pequeno $B_1$ girando no plano $xy$ com frequência $\omega$. O hamiltoniano depende do tempo — mas, visto de um referencial que gira junto com o campo, ele fica constante:
+      $$H_{\text{gir}}=\frac\hbar2\big(\Delta\,\sigma_z+\Omega\,\sigma_x\big),\qquad\Delta=\omega_0-\omega,\quad\Omega=|\gamma|B_1.$$
+      $\Delta$ é a <b>dessintonia</b> entre o campo e a precessão natural, e $\Omega$ é a <b>frequência de Rabi</b>. Pelo que se viu acima, no referencial girante o vetor de Bloch roda em torno do eixo
+      $$\mathbf n=\frac{(\Omega,0,\Delta)}{W},\qquad W=\sqrt{\Omega^2+\Delta^2}.$$
+      Partindo de $+z$, a chance de encontrar o spin virado é a <b>fórmula de Rabi</b>:
+      $$P_{+z\to-z}(t)=\frac{\Omega^2}{\Omega^2+\Delta^2}\,\sin^2\!\frac{Wt}{2}.$$</p>
+      <ul>
+        <li><b>Em ressonância</b> ($\omega=\omega_0$, $\Delta=0$) o eixo é $x$, e o spin vai de $+z$ a $-z$ e volta, com probabilidade de virar indo até $1$. Um <b>pulso $\pi$</b> ($\Omega t=\pi$) inverte o spin; um <b>pulso $\pi/2$</b> o põe no equador, numa superposição meio a meio. São as portas lógicas de um qubit.</li>
+        <li><b>Fora de ressonância</b> o eixo se inclina para $z$, o spin descreve um cone menor, e a probabilidade máxima de virar é $\frac{\Omega^2}{\Omega^2+\Delta^2}$: uma lorentziana em $\Delta$, de largura total $2\Omega$ a meia altura. Quanto mais fraco o campo girante, mais estreita a ressonância — e mais precisa a medida de $\omega_0$.</li>
+      </ul>
+      <p>É o princípio da ressonância magnética nuclear (e da ressonância magnética dos hospitais: prótons num campo de $1{,}5$ T precessam a cerca de $64$ MHz), dos relógios atômicos e do controle de qubits supercondutores.</p>
+
+      <details>
+        <summary>De onde vem o referencial girante</summary>
+        <div class="body">
+          <p>Com $\mathbf B=B_0\hat z+B_1(\cos\omega t,\,\sin\omega t,\,0)$ — girando no mesmo sentido da precessão — e $\omega_0=-\gamma B_0$, $\Omega=-\gamma B_1$ (para $\gamma&lt;0$, como no elétron; o outro sinal só troca o sentido de giro), o hamiltoniano é
+          $$H(t)=\frac\hbar2\Big(\omega_0\sigma_z+\Omega\big(\cos\omega t\,\sigma_x+\sin\omega t\,\sigma_y\big)\Big)=\frac\hbar2\Big(\omega_0\sigma_z+\Omega\,e^{-i\omega t\sigma_z/2}\sigma_x\,e^{i\omega t\sigma_z/2}\Big).$$
+          A segunda igualdade é a rotação de $\sigma_x$ em torno de $z$. Escreva $|\psi\rangle=e^{-i\omega t\sigma_z/2}|\phi\rangle$ e substitua: o fator girante se cancela no termo de $\Omega$, e derivar o prefator produz $-\frac{\hbar\omega}{2}\sigma_z$. Sobra
+          $$i\hbar\frac{d}{dt}|\phi\rangle=\frac\hbar2\big((\omega_0-\omega)\sigma_z+\Omega\sigma_x\big)|\phi\rangle,$$
+          com coeficientes constantes. Como $|\langle{-z}|\psi\rangle|=|\langle{-z}|\phi\rangle|$ (a transformação só mexe em fases das componentes $z$), a probabilidade de virar é a mesma nos dois referenciais.</p>
+          <p>Na prática, o campo de radiofrequência costuma ser <em>oscilante</em>, $2B_1\cos\omega t\,\hat x$, e não girante. Um campo oscilante é a soma de dois girantes em sentidos opostos; o que gira no sentido "errado" aparece no referencial girante com frequência $2\omega$ e quase não faz efeito quando $\omega_0\gg\Omega$. Jogá-lo fora é a <b>aproximação de onda girante</b>, e a célula de Python mede quanto ela erra.</p>
+        </div>
+      </details>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
+      <p>À esquerda, a esfera de Bloch — arraste para girar a vista. A linha tracejada verde é o eixo $\mathbf n$ em torno do qual o vetor roda (no referencial girante), o rastro violeta é o caminho de $0$ até $t$, e a seta é o vetor de Bloch no instante $t$. À direita, a probabilidade de encontrar o spin em $-z$, com a amplitude $\Omega^2/(\Omega^2+\Delta^2)$ tracejada quando se parte de $+z$.</p>
+
+      <div class="demo" id="demo-rabi">
+        <div class="controls">
+          <label>Situação <select id="rb-preset" aria-label="Situação pronta"></select></label>
+          <label>começa em <select id="rb-ini" aria-label="Estado inicial"></select></label>
+          <label class="check"><input type="checkbox" id="rb-lab"> visto do laboratório</label>
+        </div>
+        <div class="controls">
+          <label>Δ <input type="range" id="rb-D" min="-3" max="3" step="0.05" value="0" aria-label="Dessintonia"><output id="rb-Dv">0</output></label>
+          <label>Ω <input type="range" id="rb-O" min="0" max="3" step="0.05" value="1" aria-label="Frequência de Rabi"><output id="rb-Ov">1</output></label>
+        </div>
+        <div class="controls">
+          <label>t <input type="range" id="rb-t" min="0" max="12.566" step="0.01" value="0" aria-label="Tempo"><output id="rb-tv">0</output></label>
+          <button id="rb-play" type="button">▶ Animar</button>
+          <button id="rb-pi" type="button">pulso π</button>
+        </div>
+        <div class="panels two">
+          <canvas id="rb-esfera" class="alto" role="img" aria-label="Esfera de Bloch com o eixo de rotação, o rastro e o vetor de Bloch"></canvas>
+          <canvas id="rb-prob" class="alto" role="img" aria-label="Probabilidade de encontrar o spin em menos z contra o tempo"></canvas>
+        </div>
+        <div class="readout" id="rb-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac)"></i>vetor de Bloch e seu rastro</span>
+          <span><i style="border-top-style:dashed;border-color:var(--aux)"></i>eixo n; amplitude Ω²/W²</span>
+        </div>
+      </div>
+
+      <p>Para tentar:</p>
+      <ol>
+        <li>Em <b>precessão livre</b>, o vetor parte de $+x$ e roda no equador em torno de $z$; $P(-z)$ fica parado em $\frac12$. Mude Δ: só a velocidade muda. Comece em $+z$: nada se mexe — é um estado estacionário.</li>
+        <li>Em <b>ressonância</b>, anime e veja o vetor descer de polo a polo pelo meridiano $y$–$z$. Clique em <b>pulso π</b>: $P(-z)=1$.</li>
+        <li>Aumente Δ devagar. O eixo verde se inclina, o vetor passa a descrever um cone que não chega ao polo sul, e a curva da direita fica mais rápida e mais baixa. Com $\Delta=2\Omega$, a amplitude é $\frac15$.</li>
+        <li>Marque <b>visto do laboratório</b>. É o mesmo movimento, somado a uma precessão rápida em torno de $z$: o vetor desce do polo norte em espiral. A curva da direita não muda — a probabilidade de $-z$ não depende do referencial.</li>
+      </ol>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>A célula resolve a equação de Schrödinger pela receita espectral — diagonaliza $H$ uma vez e pendura as fases. Complete a linha das fases, e o resto vem de graça: a fórmula de Rabi conferida até o arredondamento, os retratos de Schrödinger e Heisenberg dando a mesma média, a curva de ressonância com largura $2\Omega$ e, por fim, o campo <em>oscilante</em> de verdade no laboratório, integrado passo a passo, contra a aproximação de onda girante.</p>
+      <div class="pycell" data-title="Rabi pela receita espectral"
+           data-starter="../py/evolucao_lacunas.py"
+           data-solution="../py/evolucao_solucao.py"></div>
+      <p>Com $\omega_0=20\,\Omega$, o campo oscilante desvia da onda girante em pouco mais de $1\%$: pequenas ondulações sobre a curva de Rabi, na frequência $2\omega_0$. Experimente $\omega_0=5$ na última parte do código: as ondulações crescem e a ressonância se desloca um pouco (o desvio de Bloch–Siegert).</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Unitário e estacionário</p>
+        <p>(a) Mostre que $U(t)=e^{-iHt/\hbar}$ é unitário quando $H$ é hermitiano. (b) Mostre que, num estado estacionário, $\langle A\rangle$ não depende do tempo para nenhum observável $A$. (c) Num estado $c_1|1\rangle+c_2|2\rangle$ com $E_1\ne E_2$, com que frequência oscila $\langle A\rangle$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Na base de autovetores, $U$ é diagonal com entradas $e^{-iE_nt/\hbar}$ de módulo $1$, e $U^\dagger$ tem as conjugadas: $U^\dagger U=I$.</p>
+          <p>(b) $\langle A\rangle_t=\langle n|e^{iE_nt/\hbar}Ae^{-iE_nt/\hbar}|n\rangle=\langle n|A|n\rangle$.</p>
+          <p>(c) $\langle A\rangle_t=|c_1|^2A_{11}+|c_2|^2A_{22}+2\,\mathrm{Re}\big(\bar c_1c_2A_{12}e^{-i(E_2-E_1)t/\hbar}\big)$: frequência angular $(E_2-E_1)/\hbar$, a frequência de Bohr. Se $A_{12}=0$, nem isso — $A$ não "enxerga" a superposição.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Números</p>
+        <p>Para o elétron, $|\gamma|/2\pi\approx28$ GHz/T; para o próton, $\approx42{,}6$ MHz/T. (a) Qual a frequência de Larmor de um elétron num campo de $0{,}35$ T, e de um próton num tomógrafo de $3$ T? (b) Que diferença de energia, em eV, separa os dois níveis do próton a $3$ T? Compare com a energia térmica $k_BT$ a $37\,^\circ$C. Por que isso torna a ressonância magnética nuclear um sinal fraco?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Elétron: $28\times0{,}35\approx9{,}8$ GHz (micro-ondas: é a ressonância de spin eletrônico em banda X). Próton: $42{,}6\times3\approx128$ MHz (radiofrequência).</p>
+          <p>(b) $\Delta E=h\nu\approx4{,}14\times10^{-15}\ \text{eV·s}\times1{,}28\times10^8\ \text{Hz}\approx5{,}3\times10^{-7}$ eV, contra $k_BT\approx0{,}027$ eV. A razão de Boltzmann entre as populações é $e^{-\Delta E/k_BT}\approx1-2\times10^{-5}$: só uns $10$ prótons em um milhão sobram no nível de baixo. O sinal vem desse excesso minúsculo, e só funciona porque há $\sim10^{23}$ prótons num centímetro cúbico de tecido.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. A exponencial de uma matriz de Pauli</p>
+        <p>(a) Usando $(\mathbf n\cdot\boldsymbol\sigma)^2=I$, mostre que $e^{-i\alpha\,\mathbf n\cdot\boldsymbol\sigma/2}=\cos\frac\alpha2\,I-i\sin\frac\alpha2\,\mathbf n\cdot\boldsymbol\sigma$. (b) Conclua que uma rotação de $2\pi$ é $-I$. (c) Use (a) para deduzir a fórmula de Rabi.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Na série da exponencial, as potências pares de $\mathbf n\cdot\boldsymbol\sigma$ são $I$ e as ímpares são $\mathbf n\cdot\boldsymbol\sigma$; separando, aparecem as séries do cosseno e do seno de $\alpha/2$. (b) Com $\alpha=2\pi$: $\cos\pi\,I=-I$.</p>
+          <p>(c) $H_{\text{gir}}=\frac{\hbar W}2\,\mathbf n\cdot\boldsymbol\sigma$, então $U=\cos\frac{Wt}2I-i\sin\frac{Wt}2\,\mathbf n\cdot\boldsymbol\sigma$, e $\langle{-z}|U|{+z}\rangle=-i\sin\frac{Wt}2\,\langle{-z}|\mathbf n\cdot\boldsymbol\sigma|{+z}\rangle=-i\sin\frac{Wt}{2}\,(n_x+in_y)$. Com $n_x=\Omega/W$, $n_y=0$: $P=\frac{\Omega^2}{W^2}\sin^2\frac{Wt}2$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Franjas de Ramsey</p>
+        <p>No referencial girante, partindo de $+z$: um pulso $\pi/2$ curto e forte em torno de $x$ (curto o bastante para desprezar $\Delta$ durante ele), depois um tempo $\tau$ sem campo girante, depois outro pulso $\pi/2$ igual. (a) Acompanhe o vetor de Bloch e mostre que $P(-z)=\cos^2\frac{\Delta\tau}2$. (b) Por que isso mede $\omega_0$ com precisão que melhora com $\tau$, e não com $\Omega$? (É o princípio dos relógios atômicos.)</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Uma rotação de $\pi/2$ em torno de $x$ leva $+z$ a $-y$. Sem campo girante, o eixo é $z$ e o vetor roda de $\phi=\Delta\tau$ no equador: $(\sin\phi,-\cos\phi,0)$. O segundo pulso leva $(x,y,z)\mapsto(x,-z,y)$, e o vetor vai a $(\sin\phi,0,-\cos\phi)$. Então $P(-z)=\frac{1-r_z}2=\frac{1+\cos\phi}2=\cos^2\frac{\Delta\tau}2$.</p>
+          <p>(b) As franjas em $\Delta$ têm período $2\pi/\tau$: quanto maior o tempo livre, mais finas, e o centro $\Delta=0$ marca $\omega=\omega_0$ com precisão $\sim1/\tau$. Num único pulso de Rabi, a largura é $\sim\Omega$, e diminuir $\Omega$ exige pulsos longos <em>com campo ligado</em>, sujeitos a todas as imperfeições do campo. Ramsey separa as duas coisas: os pulsos fazem a mistura, a espera faz a medida.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="stern-gerlach.html">Stern–Gerlach e o qubit</a></li>
+            <li><a href="observaveis.html">Observáveis e medição</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="emaranhamento.html">Emaranhamento e Bell</a></li>
+            <li><a href="momento-angular.html">Momento angular: a álgebra</a></li>
+            <li class="soon">Perturbação no tempo e regra de ouro (em breve)</li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/rabi-core.js"></script>
+  <script src="../assets/rabi-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Observáveis e medição — Mecânica quântica</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Observáveis e medição: os postulados em uso</h1>
+        <p class="lede">Quatro regras curtas dizem tudo o que a mecânica quântica afirma sobre o mundo. Duas delas são o teorema espectral com uma leitura física; uma terceira, a do colapso, é a mais estranha e a mais fácil de usar.</p>
+        <p class="meta">Usa a notação de <a href="dirac.html">Dirac</a>; os exemplos vêm de <a href="stern-gerlach.html">Stern–Gerlach</a>. Leitura de uns 30 minutos, mais a célula de Python.</p>
+        <ul class="livros">
+          <li><b>Shankar</b>, cap. 4: os postulados enunciados primeiro, como aqui.</li>
+          <li><b>Griffiths</b>, §3.2–3.4 ("interpretação estatística generalizada"). <b>Freericks</b>, cap. 2 e 6, na linguagem do spin.</li>
+        </ul>
+      </header>
+
+      <h2 id="postulados" data-toc="Os postulados">Os postulados</h2>
+      <aside class="box">
+        <p class="tag">As regras do jogo</p>
+        <ol>
+          <li><b>Estado.</b> O estado de um sistema é um vetor unitário $|\psi\rangle$ de um espaço de Hilbert $\mathcal H$, determinado a menos de uma fase: $|\psi\rangle$ e $e^{i\alpha}|\psi\rangle$ são o mesmo estado.</li>
+          <li><b>Observável.</b> A cada grandeza mensurável corresponde um operador hermitiano $A=A^\dagger$ em $\mathcal H$.</li>
+          <li><b>Medida.</b> Os resultados possíveis de medir $A$ são seus autovalores $a$. Se $\Pi_a$ é o projetor ortogonal sobre o autoespaço de $a$, então
+          $$P(a)=\langle\psi|\Pi_a|\psi\rangle,$$
+          e, logo depois de obtido o resultado $a$, o estado passa a ser $\Pi_a|\psi\rangle/\|\Pi_a|\psi\rangle\|$.</li>
+          <li><b>Evolução.</b> Entre medidas, o estado obedece a $i\hbar\,\frac{d}{dt}|\psi\rangle=H|\psi\rangle$, com $H$ o observável energia. (Fica para a <a href="evolucao-spin.html">página da evolução</a>.)</li>
+        </ol>
+      </aside>
+      <p>Repare em como o teorema espectral sustenta as regras 2 e 3. Um operador hermitiano tem autovalores <b>reais</b> — e o resultado de uma medida é um número real. Seus autoespaços são <b>ortogonais e somam o espaço todo</b>, ou seja, $\sum_a\Pi_a=I$ — e isso é exatamente o que garante $\sum_aP(a)=\langle\psi|\psi\rangle=1$. Se um operador qualquer fosse admitido como observável, nem os resultados seriam reais nem as probabilidades somariam um.</p>
+      <p>Quando o autovalor $a$ não é degenerado, com autovetor unitário $|a\rangle$, o projetor é $|a\rangle\langle a|$ e a regra fica a de <a href="stern-gerlach.html#amplitudes">Stern–Gerlach</a>: $P(a)=|\langle a|\psi\rangle|^2$, e o estado depois é $|a\rangle$.</p>
+
+      <h2 id="spin" data-toc="O spin como observável">O spin como observável</h2>
+      <p>Em Stern–Gerlach, o ímã $z$ dá $+\tfrac\hbar2$ no estado $|{+z}\rangle$ e $-\tfrac\hbar2$ no estado $|{-z}\rangle$ (o spin do elétron vale $\hbar/2$; o momento magnético é proporcional a ele). O observável que tem esses autovetores e esses autovalores é, pelo teorema espectral,
+      $$S_z=\tfrac\hbar2|{+z}\rangle\langle{+z}|-\tfrac\hbar2|{-z}\rangle\langle{-z}|=\tfrac\hbar2\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}.$$
+      Fazendo o mesmo com $|{\pm x}\rangle$ e $|{\pm y}\rangle$ sai $S_x$ e $S_y$, e as três matrizes entre parênteses são as <b>matrizes de Pauli</b>:
+      $$\sigma_x=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix},\quad\sigma_y=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix},\quad\sigma_z=\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix},\qquad\mathbf S=\tfrac\hbar2\boldsymbol\sigma.$$
+      Para um ímã na direção $\mathbf n$, o observável é $S_{\mathbf n}=\mathbf n\cdot\mathbf S=\tfrac\hbar2(n_x\sigma_x+n_y\sigma_y+n_z\sigma_z)$, e um cálculo direto mostra que seus autovetores são os $|{\pm}\mathbf n\rangle$ da esfera de Bloch, com autovalores $\pm\tfrac\hbar2$. A componente do spin numa direção qualquer é linear no vetor $\mathbf n$, como para uma seta clássica — mas o que é linear é o <em>operador</em>, não o resultado da medida, que é sempre $\pm\hbar/2$.</p>
+
+      <h2 id="esperado" data-toc="Valor esperado">Valor esperado e variância</h2>
+      <p>A média dos resultados, sobre muitas cópias do mesmo estado, é
+      $$\langle A\rangle=\sum_a a\,P(a)=\sum_a a\,\langle\psi|\Pi_a|\psi\rangle=\Big\langle\psi\Big|\sum_aa\,\Pi_a\Big|\psi\Big\rangle=\langle\psi|A|\psi\rangle.$$
+      Não é preciso diagonalizar nada para calcular uma média: basta o "sanduíche". O mesmo vale para qualquer função, $\langle f(A)\rangle=\langle\psi|f(A)|\psi\rangle$, e em particular para a variância,
+      $$(\Delta A)^2=\langle A^2\rangle-\langle A\rangle^2=\big\|(A-\langle A\rangle)\psi\big\|^2.$$
+      A última forma diz quando a medida é <b>certa</b>: $\Delta A=0$ se e só se $(A-\langle A\rangle)\psi=0$, isto é, se $\psi$ é autovetor de $A$. Dispersão zero é o mesmo que estado próprio.</p>
+
+      <aside class="box">
+        <p class="tag">O vetor de Bloch é feito de médias</p>
+        <p>No estado $|{+}\mathbf m\rangle$, a média de $\sigma_{\mathbf n}=\mathbf n\cdot\boldsymbol\sigma$ é $P(+)-P(-)=\cos^2\frac\gamma2-\sin^2\frac\gamma2=\cos\gamma=\mathbf m\cdot\mathbf n$. Com $\mathbf n=\mathbf e_x,\mathbf e_y,\mathbf e_z$:
+        $$\big(\langle\sigma_x\rangle,\langle\sigma_y\rangle,\langle\sigma_z\rangle\big)=\mathbf m.$$
+        O ponto da esfera de Bloch é o vetor das três médias. Uma componente medida dá sempre $\pm1$; a <em>média</em> é que se comporta como a componente de uma seta.</p>
+      </aside>
+
+      <h2 id="colapso" data-toc="O que a medida faz">O que a medida faz com o estado</h2>
+      <p>A segunda metade da regra 3 é o que torna a medida repetível: medido $a$, o estado vai para o autoespaço de $a$, e uma segunda medida de $A$ dá $a$ com certeza. Foi o que se viu em "$z$, depois $z$". E é também o que faz uma medida <b>perturbar</b> as seguintes, como em "$z$, $x$, $z$": medir $S_x$ põe o estado num autovetor de $S_x$, que não é autovetor de $S_z$.</p>
+      <p>Quando o autovalor é degenerado, a regra é mais delicada e mais interessante: o estado é projetado no autoespaço, não num vetor escolhido dentro dele. A medida destrói só a informação que ela precisava destruir. Se $\psi=\alpha|1\rangle+\beta|2\rangle+\gamma|3\rangle$ e $A$ tem o mesmo autovalor em $|1\rangle$ e $|2\rangle$, obter esse autovalor leva o estado a $(\alpha|1\rangle+\beta|2\rangle)/\sqrt{|\alpha|^2+|\beta|^2}$ — a fase relativa entre $\alpha$ e $\beta$ sobrevive, e com ela a possibilidade de interferência depois.</p>
+
+      <details>
+        <summary>E o que é, afinal, uma medida? (opcional)</summary>
+        <div class="body">
+          <p>Os postulados tratam a medida como um evento primitivo, separado da evolução da regra 4, que é linear e determinística. Isso funciona impecavelmente na prática e incomoda na teoria: um aparelho também é feito de átomos, e deveria obedecer à regra 4. O que decide quando aplicar a regra 3? Esse é o <b>problema da medida</b>.</p>
+          <p>As respostas vão de "a função de onda é só a informação do observador, e atualizá-la não é um processo físico" (leituras à la Copenhague e QBism) até "nunca há colapso: o aparelho se emaranha com o sistema, e cada resultado vive num ramo" (muitos mundos), passando por teorias que mudam a dinâmica (colapso espontâneo) ou acrescentam variáveis (Bohm). A <b>decoerência</b> explica por que, na prática, não se vê interferência entre resultados macroscopicamente distintos, mas não escolhe qual resultado acontece. Nenhuma dessas leituras muda uma única previsão desta página — e a <a href="emaranhamento.html">página de Bell</a> mostra o que qualquer uma delas precisa aceitar.</p>
+        </div>
+      </details>
+
+      <h2 id="continuo" data-toc="Espectro contínuo">Observáveis de espectro contínuo</h2>
+      <p>Para a posição, não há autovetores em $\mathcal H$ (veja a <a href="dirac.html#infinito">página de Dirac</a>), e as regras se escrevem com intervalos no lugar de pontos. O projetor sobre "a partícula está em $[a,b]$" é
+      $$\Pi_{[a,b]}=\int_a^b|x\rangle\langle x|\,dx,\qquad P\big(x\in[a,b]\big)=\langle\psi|\Pi_{[a,b]}|\psi\rangle=\int_a^b|\psi(x)|^2\,dx.$$
+      É a interpretação de Born da função de onda, agora como um caso particular da regra 3. Do mesmo modo, $|\varphi(p)|^2$ é a densidade de probabilidade do momento, e $\langle X\rangle=\int x|\psi|^2dx$, $\langle P\rangle=\int\bar\psi\,(-i\hbar\psi')\,dx$.</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo: uma máquina de medir</h2>
+      <p>Um spin 1 tem três resultados possíveis, $m=+1,0,-1$ (em unidades de $\hbar$). A célula monta $S_x$ e $S_z$ na base de $S_z$, decompõe o observável em autoespaços e mede: sorteia o resultado com a regra de Born e projeta o estado. Complete as duas linhas que <em>são</em> os postulados — a probabilidade e o colapso — e compare com $20\,000$ medidas: as frequências, a média contra $\langle\psi|S_x|\psi\rangle$, e o efeito de medir $S_x$ antes de $S_z$.</p>
+      <div class="pycell" data-title="Regra de Born e colapso, com sorteio"
+           data-starter="../py/observaveis_lacunas.py"
+           data-solution="../py/observaveis_solucao.py"></div>
+      <p>No estado escolhido, $S_x=0$ <b>nunca</b> sai, embora $0$ seja um autovalor perfeitamente bom (o exercício 4 explica por quê). E medir $S_z$ direto dá um terço para cada valor, enquanto medir $S_x$ antes empurra a distribuição de $S_z$ para $\big(\tfrac14,\tfrac12,\tfrac14\big)$: a medida do meio mudou o estado.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Por que hermitiano</p>
+        <p>Mostre que um operador hermitiano tem autovalores reais e que autovetores de autovalores distintos são ortogonais. Em que passo cada conclusão usa $A=A^\dagger$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Se $A|a\rangle=a|a\rangle$, então $a\langle a|a\rangle=\langle a|Aa\rangle=\langle Aa|a\rangle=\bar a\langle a|a\rangle$ — o passo do meio é a hermiticidade —, e como $\langle a|a\rangle&gt;0$, $a=\bar a$.</p>
+          <p>Se $A|b\rangle=b|b\rangle$ com $b\ne a$: $b\langle a|b\rangle=\langle a|Ab\rangle=\langle Aa|b\rangle=a\langle a|b\rangle$ (usando que $a$ é real), logo $(b-a)\langle a|b\rangle=0$ e $\langle a|b\rangle=0$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. O spin numa direção qualquer</p>
+        <p>(a) Mostre que $(\mathbf n\cdot\boldsymbol\sigma)^2=I$ para $\mathbf n$ unitário, e conclua que os autovalores de $\mathbf n\cdot\boldsymbol\sigma$ são $\pm1$. (b) Confira que $|{+}\mathbf n\rangle=(\cos\frac\theta2,e^{i\varphi}\sin\frac\theta2)$ é autovetor de autovalor $+1$. (c) Calcule $\langle S_x\rangle$, $\langle S_y\rangle$, $\langle S_z\rangle$ e $\Delta S_x$ no estado $|{+z}\rangle$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\sigma_j^2=I$ e $\sigma_j\sigma_k=-\sigma_k\sigma_j$ para $j\ne k$, então os termos cruzados de $(\sum n_j\sigma_j)^2$ se cancelam e sobra $\sum n_j^2I=I$. Se $\mathbf n\cdot\boldsymbol\sigma\,v=\lambda v$, então $v=\lambda^2v$ e $\lambda=\pm1$; o traço é zero, então aparecem os dois.</p>
+          <p>(b) $\mathbf n\cdot\boldsymbol\sigma=\begin{pmatrix}\cos\theta&amp;e^{-i\varphi}\sin\theta\\e^{i\varphi}\sin\theta&amp;-\cos\theta\end{pmatrix}$. A primeira linha aplicada ao vetor dá $\cos\theta\cos\frac\theta2+\sin\theta\sin\frac\theta2=\cos\frac\theta2$; a segunda dá $e^{i\varphi}(\sin\theta\cos\frac\theta2-\cos\theta\sin\frac\theta2)=e^{i\varphi}\sin\frac\theta2$.</p>
+          <p>(c) $\langle S_x\rangle=\langle S_y\rangle=0$ e $\langle S_z\rangle=\frac\hbar2$. Como $S_x^2=\frac{\hbar^2}4I$, $(\Delta S_x)^2=\frac{\hbar^2}4-0$, e $\Delta S_x=\frac\hbar2$: incerteza máxima em $x$ num estado sem incerteza nenhuma em $z$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Fase global e fase relativa</p>
+        <p>(a) Mostre que $|\psi\rangle$ e $e^{i\alpha}|\psi\rangle$ dão a mesma probabilidade para todo resultado de todo observável. (b) Os estados $\frac1{\sqrt2}(|{+z}\rangle+|{-z}\rangle)$ e $\frac1{\sqrt2}(|{+z}\rangle-|{-z}\rangle)$ dão as mesmas probabilidades para $S_z$. São o mesmo estado? Encontre um observável que os distinga com certeza.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\langle e^{i\alpha}\psi|\Pi_a|e^{i\alpha}\psi\rangle=e^{-i\alpha}e^{i\alpha}\langle\psi|\Pi_a|\psi\rangle$. O mesmo vale para o estado depois da medida, que só ganha a fase.</p>
+          <p>(b) Não: são $|{+x}\rangle$ e $|{-x}\rangle$, ortogonais. Medindo $S_x$, o primeiro dá $+\frac\hbar2$ e o segundo $-\frac\hbar2$, sempre. Uma fase <em>relativa</em> entre componentes é física; só a global não é.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. O zero que nunca sai</p>
+        <p>Na célula, $\psi=\frac1{\sqrt3}(1,i,1)$ na base de $S_z$ de um spin 1. (a) Ache o autovetor de $S_x$ de autovalor $0$ e mostre que ele é ortogonal a $\psi$. (b) Calcule as probabilidades de $S_x=\pm1$ e confira $\langle S_x\rangle=0$ e $(\Delta S_x)^2=1$. (c) Depois de medir $S_x=+1$, qual a distribuição de $S_z$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $S_x=\frac1{\sqrt2}\begin{pmatrix}0&amp;1&amp;0\\1&amp;0&amp;1\\0&amp;1&amp;0\end{pmatrix}$ manda $(1,0,-1)$ em $(0,0,0)$, então $|S_x{=}0\rangle=\frac1{\sqrt2}(1,0,-1)$, e $\langle S_x{=}0|\psi\rangle=\frac1{\sqrt6}(1-1)=0$.</p>
+          <p>(b) Os outros autovetores são $\frac12(1,\pm\sqrt2,1)$. Então $\langle\pm|\psi\rangle=\frac{2\pm i\sqrt2}{2\sqrt3}$, de módulo ao quadrado $\frac{4+2}{12}=\frac12$. A média é $\frac12(+1)+\frac12(-1)=0$ e a variância é $\frac12\cdot1+\frac12\cdot1-0=1$.</p>
+          <p>(c) O estado vai para $\frac12(1,\sqrt2,1)$, e $S_z$ dá $+1,0,-1$ com probabilidades $\frac14,\frac12,\frac14$ — exatamente o que a célula mediu.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Medida degenerada</p>
+        <p>Em $\mathbb C^3$, seja $A=\mathrm{diag}(1,1,-1)$ e $\psi=\frac1{\sqrt3}(1,1,1)$. Mede-se $A$ e sai $1$; em seguida mede-se o observável $B=|v\rangle\langle v|$, com $v=\frac1{\sqrt2}(1,1,0)$. Qual a chance de $B=1$? Compare com o que aconteceria se a primeira medida tivesse projetado num vetor escolhido ao acaso dentro do autoespaço.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Pela regra de Lüders, o estado depois de $A=1$ é $\frac1{\sqrt2}(1,1,0)=v$, e $B=1$ sai com certeza: probabilidade $1$.</p>
+          <p>Se, em vez disso, a medida jogasse o estado em $|1\rangle$ ou $|2\rangle$ (meio a meio), a chance seria $|\langle v|1\rangle|^2=\frac12$. A diferença é a fase relativa entre as componentes $1$ e $2$, que a projeção preserva — e que é real: experimentos de interferência a enxergam.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="stern-gerlach.html">Stern–Gerlach e o qubit</a></li>
+            <li><a href="dirac.html">Notação de Dirac e bases contínuas</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="incerteza.html">Comutadores e incerteza</a></li>
+            <li><a href="evolucao-spin.html">Evolução no tempo: precessão e Rabi</a></li>
+            <li><a href="emaranhamento.html">Emaranhamento e Bell</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>
