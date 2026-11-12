@@ -146,6 +146,40 @@
       $$\Delta z=\frac{\mu_z\,\partial_zB_z}{m}\left[\frac{L^2}{2v^2}+\frac{LD}{v^2}\right].$$
       Ele é proporcional a $\mu_z$, que é o que se queria: <b>medir a posição do ponto no anteparo é medir $\mu_z$</b>. Átomos com $\mu_z$ de sinais opostos sobem e descem a mesma distância.</p>
 
+      <aside class="box">
+        <p class="tag">Por que o átomo não se alinha com o campo?</p>
+        <p>É a primeira ideia de quase todo mundo: o campo gira o ímã atômico até apontar para ele, e no fim todos os átomos estariam alinhados. Não é o que acontece, por dois motivos.</p>
+        <figure class="fig" style="overflow-x:auto;margin:1rem 0">
+          <svg viewBox="0 0 560 290" role="img" aria-labelledby="sg-fig3-t" style="width:100%;min-width:460px;height:auto;font-family:var(--sans);font-size:13px">
+            <title id="sg-fig3-t">O momento magnético μ descreve um cone em torno do campo B, que aponta para cima. A componente ao longo de B é constante; a componente perpendicular gira.</title>
+            <defs><marker id="sg3a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+            <!-- cone: elipse da ponta de mu -->
+            <ellipse cx="280" cy="120" rx="66" ry="17" fill="var(--carac)" opacity=".10" stroke="var(--carac)" stroke-width="1.3" stroke-dasharray="5 4"/>
+            <!-- B -->
+            <path d="M280 250 L280 28" stroke="var(--ink)" stroke-width="2.6" fill="none" marker-end="url(#sg3a)"/>
+            <text x="292" y="32" fill="var(--ink)" font-weight="700">B</text>
+            <!-- mu preso na origem, ponta na elipse -->
+            <path d="M280 250 L346 120" stroke="var(--choque)" stroke-width="3" fill="none" marker-end="url(#sg3a)"/>
+            <text x="356" y="128" fill="var(--choque)" font-weight="700">μ</text>
+            <!-- componente paralela e perpendicular -->
+            <line x1="346" y1="120" x2="346" y2="250" stroke="var(--ink-soft)" stroke-width="1.2" stroke-dasharray="3 4"/>
+            <line x1="280" y1="120" x2="346" y2="120" stroke="var(--ink-soft)" stroke-width="1.2" stroke-dasharray="3 4"/>
+            <path d="M280 120 L346 120" stroke="var(--aux)" stroke-width="2.4" fill="none" marker-end="url(#sg3a)"/>
+            <text x="290" y="96" fill="var(--aux)">μ⊥ gira</text>
+            <path d="M375 250 L375 120" stroke="var(--carac)" stroke-width="2.4" fill="none" marker-start="url(#sg3a)" marker-end="url(#sg3a)"/>
+            <text x="385" y="190" fill="var(--carac)">μ<tspan dy="3" font-size="10">z</tspan> não muda</text>
+            <!-- seta de precessão -->
+            <path d="M208 124 Q222 142 252 136" stroke="var(--choque)" stroke-width="2" fill="none" marker-end="url(#sg3a)"/>
+            <text x="150" y="160" fill="var(--choque)">precessão</text>
+            <text x="150" y="176" fill="var(--choque)">em torno de B</text>
+            <text x="20" y="274" fill="var(--ink-soft)">O torque μ × B é perpendicular a μ: muda a direção, não o ângulo com B.</text>
+          </svg>
+          <figcaption>O momento magnético $\boldsymbol\mu$ descreve um cone em torno do campo $\mathbf B$. A componente $\mu_z$ fica constante; a parte perpendicular roda.</figcaption>
+        </figure>
+        <p><b>O campo não alinha, faz girar.</b> O átomo tem momento angular, e o torque $\boldsymbol\mu\times\mathbf B$ é sempre perpendicular a $\boldsymbol\mu$: ele muda a direção de $\boldsymbol\mu$ sem mudar o ângulo com $\mathbf B$, como um pião que roda em torno da vertical em vez de cair. Para $\boldsymbol\mu$ ir se deitando sobre $\mathbf B$ o átomo teria de perder energia (colisões, emissão de luz), e no feixe em vácuo, nos poucos décimos de milésimo de segundo dentro do ímã, nada disso acontece. A precessão é de dezenas de bilhões de voltas por segundo num campo de 1&nbsp;T, então a parte perpendicular tem média nula. Só $\mu_z$ fica, e é ela que entra na força.</p>
+        <p><b>E, se alinhasse, o resultado seria outro.</b> Todos os átomos acabariam na mesma orientação e seriam desviados para o mesmo lado, num ponto só. O experimento mostra <em>dois</em> pontos, metade dos átomos em cada um, mesmo com os átomos saindo do forno em orientações ao acaso. Um átomo que sai como $\mu_z=-\mu$ não vira $+\mu$ no caminho. O ímã não reorienta o átomo: ele separa os átomos por um valor que o átomo já tinha ao entrar, e o que se descobriu é que esse valor só assume dois resultados.</p>
+      </aside>
+
       <details>
         <summary>Os números: quão pequeno é o desvio?</summary>
         <div class="body">
