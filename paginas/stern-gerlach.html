@@ -34,13 +34,131 @@
       <h2 id="experimento" data-toc="O experimento">O experimento: dois pontos, e não um borrão</h2>
       <p>Em 1922, Otto Stern e Walther Gerlach aqueceram prata num forno, deixaram escapar um feixe fino de átomos e o fizeram passar entre os polos de um ímã com o campo <em>não uniforme</em>: muito mais forte perto de um polo que do outro. Cada átomo de prata se comporta como um pequeno ímã, com um momento magnético $\boldsymbol\mu$, e num campo assim ele sente uma força
       $$F_z=\mu_z\,\frac{\partial B_z}{\partial z}.$$
-      O desvio vertical do átomo mede, portanto, a componente $\mu_z$ do seu momento magnético.</p>
+      O desvio vertical do átomo mede, portanto, a componente $\mu_z$ do seu momento magnético. Como a força faz isso é o assunto da <a href="#forca">próxima seção</a>.</p>
+
+      <figure class="fig" style="overflow-x:auto">
+        <svg viewBox="0 0 900 310" role="img" aria-labelledby="sg-fig1-t" style="width:100%;min-width:720px;height:auto;font-family:var(--sans);font-size:13px">
+          <title id="sg-fig1-t">Esquema do experimento de Stern–Gerlach: o feixe sai do forno, passa por uma fenda e entre os polos de um ímã, e se divide em dois feixes que formam dois pontos no anteparo, em vez da faixa esperada pela física clássica.</title>
+          <defs><marker id="sgseta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-soft)"/></marker></defs>
+          <g fill="var(--ink-soft)" text-anchor="middle">
+            <text x="42" y="215">forno (Ag)</text><text x="111" y="228">fenda</text>
+            <text x="325" y="285">ímã</text><text x="690" y="295">anteparo</text>
+            <text x="792" y="295">vista de frente</text>
+          </g>
+          <!-- forno e fenda -->
+          <rect x="14" y="125" width="56" height="60" rx="4" fill="var(--box-bg)" stroke="var(--ink-soft)"/>
+          <text x="42" y="160" text-anchor="middle" fill="var(--choque)" font-size="22">≈</text>
+          <rect x="108" y="105" width="6" height="45" fill="var(--ink-soft)"/><rect x="108" y="160" width="6" height="45" fill="var(--ink-soft)"/>
+          <!-- polos -->
+          <polygon points="245,48 405,48 405,96 340,128 310,128 245,96" fill="var(--rule)" stroke="var(--ink-soft)"/>
+          <polygon points="245,262 405,262 405,196 352,196 336,214 314,214 298,196 245,196" fill="var(--rule)" stroke="var(--ink-soft)"/>
+          <text x="325" y="78" text-anchor="middle" fill="var(--choque)" font-weight="700">N</text>
+          <text x="325" y="246" text-anchor="middle" fill="var(--aux)" font-weight="700">S</text>
+          <!-- linhas de campo: apertadas junto à ponta de cima -->
+          <g fill="none" stroke="var(--carac)" stroke-width="1.2" opacity=".75">
+            <path d="M325 130 L325 212"/><path d="M316 130 Q304 170 300 198"/><path d="M334 130 Q346 170 350 198"/>
+            <path d="M308 122 Q284 160 278 197"/><path d="M342 122 Q366 160 372 197"/>
+          </g>
+          <text x="418" y="92" fill="var(--carac)">campo mais intenso</text>
+          <text x="418" y="211" fill="var(--carac)">campo mais fraco</text>
+          <!-- trajetórias -->
+          <path d="M114 155 L245 155" stroke="var(--ink)" stroke-width="2" fill="none"/>
+          <g fill="none" stroke-width="2.2">
+            <path d="M245 155 Q325 155 405 139 L690 82" stroke="var(--carac)"/>
+            <path d="M245 155 Q325 155 405 171 L690 228" stroke="var(--aux)"/>
+          </g>
+          <g text-anchor="start">
+            <text x="545" y="140" fill="var(--carac)">μ<tspan dy="3" font-size="10">z</tspan> &gt; 0: sobe</text>
+            <text x="545" y="180" fill="var(--aux)">μ<tspan dy="3" font-size="10">z</tspan> &lt; 0: desce</text>
+          </g>
+          <!-- anteparo e vistas -->
+          <line x1="690" y1="40" x2="690" y2="270" stroke="var(--ink-soft)" stroke-width="3"/>
+          <g stroke="var(--rule)" stroke-dasharray="2 4"><line x1="690" y1="82" x2="880" y2="82"/><line x1="690" y1="228" x2="880" y2="228"/></g>
+          <rect x="724" y="82" width="26" height="146" fill="var(--choque)" opacity=".28"/>
+          <text x="737" y="250" text-anchor="middle" fill="var(--choque)">esperado:</text><text x="737" y="265" text-anchor="middle" fill="var(--choque)">faixa</text>
+          <circle cx="810" cy="82" r="8" fill="var(--carac)"/><circle cx="810" cy="228" r="8" fill="var(--aux)"/>
+          <text x="810" y="250" text-anchor="middle" fill="var(--ink)" font-weight="700">observado:</text><text x="810" y="265" text-anchor="middle" fill="var(--ink)" font-weight="700">dois pontos</text>
+          <!-- eixo z -->
+          <path d="M20 280 L20 235" stroke="var(--ink-soft)" stroke-width="1.4" marker-end="url(#sgseta)"/>
+          <text x="30" y="243" fill="var(--ink-soft)" font-style="italic">z</text>
+        </svg>
+        <figcaption>Vista de lado. Os átomos saem do forno com $\boldsymbol\mu$ em direções ao acaso, e a fenda estreita o feixe. No ímã, o polo de cima termina em lâmina e o de baixo tem um sulco, de modo que o campo é bem mais intenso perto da lâmina. Os desvios estão exagerados (na experiência real são décimos de milímetro). À direita, o que aparece no anteparo visto de frente: a conta clássica daria uma faixa; o experimento dá dois pontos.</figcaption>
+      </figure>
+
       <p>Os átomos saem do forno com orientações ao acaso. Se $\boldsymbol\mu$ fosse uma seta comum de comprimento $\mu$, a componente $\mu_z=\mu\cos\Theta$ poderia valer qualquer coisa entre $-\mu$ e $\mu$, e o anteparo mostraria uma faixa contínua (o exercício 5 calcula que ela seria até uniforme). O que apareceu foram <b>dois pontos</b>: $\mu_z=+\mu$ ou $\mu_z=-\mu$, nada no meio.</p>
 
       <aside class="box">
         <p class="tag">O que é estranho de verdade</p>
         <p>Dois valores, sozinho, não é absurdo: talvez os ímãs atômicos só apontem para cima ou para baixo. O absurdo vem quando se gira o ímã. Com o aparelho deitado, medindo $\mu_x$, de novo dois pontos: $\pm\mu$. Com qualquer outra direção $\mathbf n$, de novo $\mu_{\mathbf n}=\pm\mu$. Nenhuma seta tem projeção $\pm\mu$ em <em>todas</em> as direções — se $\mu_z=\mu_x=\mu$, a projeção na diagonal entre $z$ e $x$ seria $\sqrt2\,\mu$. Então $\boldsymbol\mu$ não é uma seta com três componentes esperando para ser lidas.</p>
       </aside>
+
+      <h2 id="forca" data-toc="Como a força desvia">Como a força desvia os átomos</h2>
+      <p>A fórmula $F_z=\mu_z\,\partial B_z/\partial z$ tem duas metades, e cada uma responde a uma pergunta.</p>
+
+      <p><b>Por que o campo precisa ser não uniforme?</b> Pense num átomo como um ímã minúsculo, com um polo norte e um sul, e com $\boldsymbol\mu$ apontando do sul para o norte. Num campo <em>uniforme</em>, o campo puxa o polo norte para um lado e o sul, com a mesma força, para o outro (figura abaixo, à esquerda): a força total é nula, e o que sobra é um torque, que faz $\boldsymbol\mu$ girar em torno do campo (a precessão, que reaparece na <a href="evolucao-spin.html">página de evolução</a>). O centro do átomo não se mexe.</p>
+
+      <figure class="fig" style="overflow-x:auto">
+        <svg viewBox="0 0 660 270" role="img" aria-labelledby="sg-fig2-t" style="width:100%;min-width:560px;height:auto;font-family:var(--sans);font-size:13px">
+          <title id="sg-fig2-t">Um pequeno ímã de dois polos em um campo uniforme, onde as duas forças se cancelam, e em um campo cujo módulo cresce para cima, onde a força no polo de cima vence a de baixo.</title>
+          <defs>
+            <marker id="sgs2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker>
+          </defs>
+          <g fill="none" stroke-width="2.4">
+            <!-- painel esquerdo: campo uniforme -->
+            <g stroke="var(--carac)" opacity=".8" stroke-width="1.8">
+              <path d="M40 220 L40 180" marker-end="url(#sgs2)"/><path d="M40 150 L40 110" marker-end="url(#sgs2)"/><path d="M40 80 L40 40" marker-end="url(#sgs2)"/>
+              <path d="M370 220 L370 190" marker-end="url(#sgs2)"/><path d="M370 150 L370 105" marker-end="url(#sgs2)"/><path d="M370 80 L370 25" marker-end="url(#sgs2)"/>
+            </g>
+          </g>
+          <!-- ímãzinho 1 -->
+          <rect x="145" y="100" width="22" height="42" fill="var(--choque)" opacity=".85"/><rect x="145" y="142" width="22" height="42" fill="var(--aux)" opacity=".85"/>
+          <text x="156" y="127" text-anchor="middle" fill="#fff" font-weight="700">N</text><text x="156" y="170" text-anchor="middle" fill="#fff" font-weight="700">S</text>
+          <path d="M156 100 L156 62" stroke="var(--choque)" stroke-width="3" fill="none" marker-end="url(#sgs2)"/>
+          <path d="M156 184 L156 222" stroke="var(--aux)" stroke-width="3" fill="none" marker-end="url(#sgs2)"/>
+          <path d="M196 184 L196 100" stroke="var(--ink)" stroke-width="2" fill="none" marker-end="url(#sgs2)"/>
+          <!-- ímãzinho 2 -->
+          <rect x="475" y="100" width="22" height="42" fill="var(--choque)" opacity=".85"/><rect x="475" y="142" width="22" height="42" fill="var(--aux)" opacity=".85"/>
+          <text x="486" y="127" text-anchor="middle" fill="#fff" font-weight="700">N</text><text x="486" y="170" text-anchor="middle" fill="#fff" font-weight="700">S</text>
+          <path d="M486 100 L486 38" stroke="var(--choque)" stroke-width="3" fill="none" marker-end="url(#sgs2)"/>
+          <path d="M486 184 L486 206" stroke="var(--aux)" stroke-width="3" fill="none" marker-end="url(#sgs2)"/>
+          <path d="M526 184 L526 100" stroke="var(--ink)" stroke-width="2" fill="none" marker-end="url(#sgs2)"/>
+          <g fill="var(--ink-soft)">
+            <text x="30" y="258" >campo uniforme</text><text x="360" y="258">campo que cresce para cima</text>
+            <text x="172" y="56">força no N</text><text x="172" y="228">força no S</text>
+            <text x="502" y="34">força no N</text><text x="502" y="216">força no S</text>
+          </g>
+          <g fill="var(--ink)"><text x="205" y="148">μ</text><text x="535" y="148">μ</text></g>
+          <text x="60" y="100" fill="var(--carac)">B</text><text x="390" y="100" fill="var(--carac)">B</text>
+        </svg>
+        <figcaption>Um ímã minúsculo (setas pretas: o momento $\boldsymbol\mu$, do S para o N) num campo $\mathbf B$ (setas roxas; quanto maior a seta, mais intenso o campo). À esquerda, as duas forças são iguais e opostas: o ímã pode girar, mas não se desloca. À direita, o polo de cima está num campo mais intenso e é puxado com mais força: sobra uma força líquida para cima.</figcaption>
+      </figure>
+
+      <p>Num campo cuja intensidade <em>cresce para cima</em>, os dois polos sentem forças diferentes. Se os polos têm "cargas" $\pm q$ separadas por uma distância $d$ ao longo de $z$ (o que dá $\mu_z=qd$ quando o norte está em cima), a força líquida é
+      $$F_z=q\,B_z(z+d)-q\,B_z(z)\approx qd\,\frac{\partial B_z}{\partial z}=\mu_z\,\frac{\partial B_z}{\partial z}.$$
+      Esta é a fórmula. O fator $\mu_z$ diz <em>quanto</em> do átomo é "norte em cima": se $\mu_z>0$ o norte está em cima, o átomo é puxado para onde o campo é mais forte; se $\mu_z<0$ é empurrado para o lado oposto; se $\mu_z=0$ não sente força. O fator $\partial B_z/\partial z$ diz <em>com que força o campo muda</em> de um ponto a outro, e é por isso que o ímã de Stern e Gerlach tem a ponta em lâmina. (A imagem dos polos é só uma muleta: o mesmo resultado sai da energia $U=-\boldsymbol\mu\cdot\mathbf B$ e de $F_z=-\partial U/\partial z$.)</p>
+
+      <p><b>Da força à trajetória.</b> Daqui em diante é a mecânica de Newton, a mesma de uma bola lançada. O átomo atravessa o ímã na direção $x$ com velocidade $v$, que a força vertical quase não altera. Se o ímã tem comprimento $L$:</p>
+      <ol>
+        <li><b>dentro do ímã:</b> a aceleração vertical é constante, $a=F_z/m$, durante o tempo $t=L/v$. O átomo sai com velocidade vertical $v_z=at$ e já subiu $\tfrac12at^2$;</li>
+        <li><b>depois do ímã:</b> não há mais força, o átomo segue em linha reta e, num percurso $D$ até o anteparo, sobe mais $v_z\,D/v$.</li>
+      </ol>
+      <p>O desvio total é
+      $$\Delta z=\frac{\mu_z\,\partial_zB_z}{m}\left[\frac{L^2}{2v^2}+\frac{LD}{v^2}\right].$$
+      Ele é proporcional a $\mu_z$, que é o que se queria: <b>medir a posição do ponto no anteparo é medir $\mu_z$</b>. Átomos com $\mu_z$ de sinais opostos sobem e descem a mesma distância.</p>
+
+      <details>
+        <summary>Os números: quão pequeno é o desvio?</summary>
+        <div class="body">
+          <p>Para a prata, o momento magnético do átomo é o de um único elétron desemparelhado, $\mu_z=\pm\mu_B=\pm9{,}27\times10^{-24}\,\mathrm{J/T}$, e a massa é $m\approx1{,}8\times10^{-25}\,\mathrm{kg}$. Com valores da ordem dos de 1922: gradiente $\partial_zB_z\approx10\ \mathrm{T/cm}=10^3\ \mathrm{T/m}$, $L=3{,}5\ \mathrm{cm}$, $D\approx10\ \mathrm{cm}$ e $v\approx550\ \mathrm{m/s}$ (átomos saindo de um forno a mais de mil graus):</p>
+          <ul>
+            <li>aceleração $a=\mu_B\,\partial_zB_z/m\approx5\times10^4\ \mathrm{m/s^2}$, uns 5 000 $g$;</li>
+            <li>tempo no ímã $t=L/v\approx6\times10^{-5}\ \mathrm{s}$, e velocidade vertical de saída $v_z\approx3\ \mathrm{m/s}$, pouco diante dos 550 m/s do avanço;</li>
+            <li>desvio no ímã $\approx0{,}1\ \mathrm{mm}$ e, com o voo até o anteparo, $\Delta z\approx0{,}7\ \mathrm{mm}$ para cada lado.</li>
+          </ul>
+          <p>É pouco, mas visível, e o que importa é a escala: fração de milímetro. (Os átomos têm velocidades diferentes, então cada ponto sai um pouco alargado, e o centro dos pontos reais dependia desses detalhes do aparelho. A conta acima mostra a ordem de grandeza, não o número exato de 1922.)</p>
+          <p>Uma sutileza: o campo de um ímã real não tem só a componente $B_z$ que varia em $z$; como $\nabla\cdot\mathbf B=0$, aparece também uma variação transversal. O átomo, porém, precessa muito depressa em torno do campo, e as forças transversais têm média nula ao longo da precessão. Fica só o efeito em $z$.</p>
+        </div>
+      </details>
 
       <h2 id="serie" data-toc="Ímãs em série">Ímãs em série</h2>
       <p>Chame de <b>ímã $z$</b> o aparelho que separa os átomos pelo valor de $\mu_z$, e imagine que se pode bloquear um dos dois feixes de saída. Três montagens contam a história toda.</p>
@@ -194,6 +312,17 @@
         <summary>Solução</summary>
         <div class="body">
           <p>Direção uniforme na esfera significa densidade proporcional à área: a faixa entre as colatitudes $\Theta$ e $\Theta+d\Theta$ tem área $2\pi\sin\Theta\,d\Theta$, de um total de $4\pi$. Com $u=\cos\Theta$, $du=-\sin\Theta\,d\Theta$, e a densidade de $u$ é $\frac{2\pi}{4\pi}=\frac12$ em $[-1,1]$: uniforme. (É o teorema de Arquimedes: a área de uma faixa da esfera só depende da altura da faixa.) Logo $\mu_z=\mu u$ seria uniforme em $[-\mu,\mu]$ e o anteparo mostraria uma faixa vertical de intensidade constante, em vez de dois pontos.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. O desvio e a velocidade</p>
+        <p>Use $\Delta z=\frac{\mu_z\,\partial_zB_z}{m}\big[\frac{L^2}{2v^2}+\frac{LD}{v^2}\big]$. (a) Se o forno é esfriado e a velocidade dos átomos cai à metade, o desvio muda de quanto? (b) Dois átomos de $\mu_z=+\mu_B$ têm velocidades $v$ e $1{,}1\,v$. Em que proporção diferem seus desvios, e o que isso faz com os dois pontos do anteparo?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) O desvio vai com $1/v^2$: com $v/2$ ele fica $\mathbf{4}$ vezes maior (os átomos ficam mais tempo no ímã). (b) A razão dos desvios é $1/1{,}1^2\approx0{,}83$: o átomo 10% mais rápido desvia 17% menos. Como o feixe tem uma distribuição de velocidades, cada ponto sai alongado na direção $z$, em vez de pontual. Os dois pontos continuam separados porque o alargamento é uma fração do desvio, e não passa por zero: nenhum átomo, por mais rápido que seja, deixa de ser desviado.</p>
         </div>
       </details>
 
